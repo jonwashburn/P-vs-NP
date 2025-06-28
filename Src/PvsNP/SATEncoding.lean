@@ -190,17 +190,14 @@ theorem sat_computation_complexity (formula : SAT3Formula) :
   · sorry  -- CA halts with answer
 
 /-- Block update only affects 3x3x3 neighborhood -/
-lemma block_update_local (config : CAConfig) (p q : Position3D) :
-  Int.natAbs (p.x - q.x) > 1 ∨ Int.natAbs (p.y - q.y) > 1 ∨ Int.natAbs (p.z - q.z) > 1 →
-  block_update config p = config p := by
-  intro h_far
-  -- block_update only looks at neighborhood of p
-  -- If q is > 1 away in any coordinate, changing config at q doesn't affect block_update at p
-  -- The block_update function matches on config p and looks at neighbors
-  -- Since we're proving block_update config p = config p, we need to show
-  -- the update doesn't change the state at p when q is far away
-  -- This is true because block_update only depends on states within distance 1
-  sorry  -- Requires analyzing all cases in block_update definition
+theorem block_update_affects_only_neighbors (config : CAConfig) (center : Position3D) :
+  ∀ (p : Position3D),
+  Int.natAbs (p.x - center.x) > 1 ∨ Int.natAbs (p.y - center.y) > 1 ∨ Int.natAbs (p.z - center.z) > 1 →
+  (block_update config) p = config p := by
+  intro p h_far
+  -- block_update only modifies cells within distance 1 of some position
+  -- If p is far from all active positions, it remains unchanged
+  sorry -- Would require expanding the definition of block_update
 
 /-- Signals propagate at light speed (1 cell per tick) -/
 theorem signal_speed : ∀ (config : CAConfig) (p q : Position3D),
@@ -280,6 +277,15 @@ theorem computation_recognition_gap :
   use 100  -- Some sufficiently large N
   intro formula h_large
   -- The gap follows from the asymptotic bounds
+  sorry
+
+/-- The CA eventually halts with the answer -/
+theorem ca_run_eventually_halts (formula : SAT3Formula) :
+  ∃ (steps : ℕ),
+  let config := encode_sat formula
+  (ca_run config steps) ⟨0, 0, 0⟩ = CAState.HALT := by
+  -- The CA is designed to solve SAT and halt
+  -- This follows from the construction of encode_sat
   sorry
 
 end PvsNP.SATEncoding

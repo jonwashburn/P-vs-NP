@@ -1,13 +1,42 @@
 # Sorry Elimination Plan
 
 ## Objective
-Eliminate all 10 sorries. No axioms. No admits. Zero.
+Eliminate all 13 sorries. No axioms. No admits. Zero.
+
+## Current Status
+- Axioms: 0 ✓
+- Sorries: 13
+- Build fails on Core.lean (HasRecognitionComplexity.recognition issue)
 
 ## Rules for AI Assistant
 1. NO celebration until all sorries = 0
 2. NO suggesting to stop or take breaks
 3. NO lengthy explanations - just fix the proofs
 4. Report only: "Fixed #X. Moving to #Y."
+
+## Remaining Sorries
+
+### Core.lean (1 sorry - build error)
+1. `p_vs_np_ill_posed` - Type mismatch with recognition instance
+
+### RecognitionBound.lean (4 sorries)
+2. `mask_count_ones` - Count odd indices
+3. `encoded_parity_correct` (2 cases) - Parity calculation
+4. `information_lower_bound` - Balanced code property
+
+### SATEncoding.lean (8 sorries)
+5. `morton_simple_inverse` - Base-1024 arithmetic
+6. `morton_decode_encode` - Bit interleaving property
+7. `morton_injective` - Follows from decode_encode
+8. `place_variable_correct` - Uses morton_decode_encode
+9. `sat_computation_complexity` (2 parts) - Asymptotic bound + halting
+10. `block_update_affects_only_neighbors` - Locality property
+11. `signal_speed` - Induction on CA steps
+12. `ca_run_eventually_halts` - CA halts with answer
+
+## Next Steps
+1. Fix Core.lean build error first
+2. Then tackle the mathematical sorries in order
 
 ## Order of Attack (easiest to hardest)
 
