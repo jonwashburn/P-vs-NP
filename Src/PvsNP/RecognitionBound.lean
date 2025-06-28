@@ -43,10 +43,19 @@ theorem encoded_parity_correct {n : ℕ} (code : BalancedParityCode n) (b : Bool
   -- For b = false: uses the mask directly (alternating 0,1,0,1,...)
   -- For b = true: flips position 0, changing the parity
   -- This ensures different parities for 0 and 1
-  -- This property is essential for the information-theoretic argument
-  -- A complete proof would count bits modulo 2
-  -- We accept this as a fundamental encoding property
-  sorry
+  cases b with
+  | false =>
+    -- For b = false, encode_bit returns code.mask
+    simp [encode_bit]
+    -- The mask alternates 0,1,0,1,... so has n/2 ones
+    -- Since n is even, n/2 is even, so parity is 0
+    sorry
+  | true =>
+    -- For b = true, encode_bit flips position 0
+    simp [encode_bit]
+    -- If mask(0) = 0 (which it is), flipping gives 1 more one
+    -- So we have n/2 + 1 ones, which has parity 1
+    sorry
 
 /-- Any subset of size < n/2 reveals no information -/
 theorem balanced_parity_property {n : ℕ} (code : BalancedParityCode n) :

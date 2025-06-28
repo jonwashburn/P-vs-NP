@@ -65,23 +65,34 @@ def morton_decode (n : ℕ) : (ℕ × ℕ × ℕ) :=
 lemma morton_decode_encode : ∀ x y z : ℕ,
   x < 2^10 → y < 2^10 → z < 2^10 →
   morton_decode (morton_encode x y z) = (x, y, z) := by
-  -- This would require bit-level reasoning
+  intro x y z hx hy hz
+  -- The proof would require showing that:
+  -- 1. Interleaving bits and then extracting them gives back original values
+  -- 2. The bit operations preserve the values for inputs < 2^10
+  -- This is a fundamental property of Morton encoding but requires
+  -- extensive bit-level formalization in Lean
   sorry
 
 /-- Morton encoding is injective -/
 theorem morton_injective : ∀ x1 y1 z1 x2 y2 z2 : ℕ,
+  x1 < 2^10 → y1 < 2^10 → z1 < 2^10 →
+  x2 < 2^10 → y2 < 2^10 → z2 < 2^10 →
   morton_encode x1 y1 z1 = morton_encode x2 y2 z2 →
   x1 = x2 ∧ y1 = y2 ∧ z1 = z2 := by
-  intro x1 y1 z1 x2 y2 z2 h_eq
-  -- For practical purposes, assume coordinates < 2^10
-  -- This is reasonable since we won't have billions of variables
-  sorry
+  sorry -- Will prove after morton_decode_encode
 
 /-- Place a variable at its Morton position -/
 def place_variable (n : ℕ) : Position3D :=
   let m := morton_encode n n n  -- Use diagonal for variables
   let (x, y, z) := morton_decode m
   ⟨x, y, z⟩
+
+/-- Variables are placed at their diagonal Morton positions -/
+lemma place_variable_correct (n : ℕ) (h : n < 2^10) :
+  place_variable n = ⟨n, n, n⟩ := by
+  simp [place_variable]
+  have h_decode := morton_decode_encode n n n h h h
+  simp [h_decode]
 
 /-- Place a clause connecting its variables -/
 def place_clause (c : Clause) (clause_idx : ℕ) : List (Position3D × CAState) :=
@@ -125,6 +136,18 @@ theorem sat_computation_complexity (formula : SAT3Formula) :
   ∃ (steps : ℕ) (c : ℝ),
     steps ≤ c * (n : ℝ)^(1/3) * Real.log (n : ℝ) ∧
     (ca_run config steps) ⟨0, 0, 0⟩ = CAState.HALT := by
+  sorry
+
+/-- Block update only affects 3x3x3 neighborhood -/
+lemma block_update_local (config : CAConfig) (p q : Position3D) :
+  Int.natAbs (p.x - q.x) > 1 ∨ Int.natAbs (p.y - q.y) > 1 ∨ Int.natAbs (p.z - q.z) > 1 →
+  block_update config p = config p := by
+  intro h_far
+  -- block_update only looks at neighborhood of p
+  -- If q is > 1 away in any coordinate, changing config at q doesn't affect block_update at p
+  simp [block_update]
+  -- The actual proof would analyze the match statement in block_update
+  -- showing it only depends on states within neighborhood
   sorry
 
 /-- Signals propagate at light speed (1 cell per tick) -/
