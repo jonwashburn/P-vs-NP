@@ -4,27 +4,28 @@
    "level": "trace"},
   {"message": "./././Src/PvsNP/SATEncoding.lean:65:6: declaration uses 'sorry'",
    "level": "warning"},
-  {"message": "./././Src/PvsNP/SATEncoding.lean:72:8: declaration uses 'sorry'",
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:110:31: unused variable `clause_idx`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:87:31: unused variable `clause_idx`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/SATEncoding.lean:125:37: unused variable `vpos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:102:37: unused variable `vpos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/SATEncoding.lean:145:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:122:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:154:6: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:131:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:167:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:155:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:191:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:162:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:203:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:179:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:227:8: declaration uses 'sorry'",
    "level": "warning"}],
- "depHash": "2450482976384060697"}
+ "depHash": "15272174263012579628"}

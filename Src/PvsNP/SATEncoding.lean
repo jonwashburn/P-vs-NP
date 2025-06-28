@@ -79,7 +79,19 @@ theorem morton_injective : ∀ x1 y1 z1 x2 y2 z2 : ℕ,
   x2 < 2^10 → y2 < 2^10 → z2 < 2^10 →
   morton_encode x1 y1 z1 = morton_encode x2 y2 z2 →
   x1 = x2 ∧ y1 = y2 ∧ z1 = z2 := by
-  sorry -- Will prove after morton_decode_encode
+  intro x1 y1 z1 x2 y2 z2 hx1 hy1 hz1 hx2 hy2 hz2 h_eq
+  -- Apply morton_decode to both sides
+  have h1 := morton_decode_encode x1 y1 z1 hx1 hy1 hz1
+  have h2 := morton_decode_encode x2 y2 z2 hx2 hy2 hz2
+  -- Since morton_encode x1 y1 z1 = morton_encode x2 y2 z2
+  -- morton_decode (morton_encode x1 y1 z1) = morton_decode (morton_encode x2 y2 z2)
+  rw [←h_eq] at h2
+  -- Now h1: morton_decode (morton_encode x1 y1 z1) = (x1, y1, z1)
+  -- And h2: morton_decode (morton_encode x1 y1 z1) = (x2, y2, z2)
+  rw [h1] at h2
+  -- h2 : (x1, y1, z1) = (x2, y2, z2)
+  simp at h2
+  exact h2
 
 /-- Place a variable at its Morton position -/
 def place_variable (n : ℕ) : Position3D :=
@@ -145,10 +157,11 @@ lemma block_update_local (config : CAConfig) (p q : Position3D) :
   intro h_far
   -- block_update only looks at neighborhood of p
   -- If q is > 1 away in any coordinate, changing config at q doesn't affect block_update at p
-  simp [block_update]
-  -- The actual proof would analyze the match statement in block_update
-  -- showing it only depends on states within neighborhood
-  sorry
+  -- The block_update function matches on config p and looks at neighbors
+  -- Since we're proving block_update config p = config p, we need to show
+  -- the update doesn't change the state at p when q is far away
+  -- This is true because block_update only depends on states within distance 1
+  sorry  -- Requires analyzing all cases in block_update definition
 
 /-- Signals propagate at light speed (1 cell per tick) -/
 theorem signal_speed : ∀ (config : CAConfig) (p q : Position3D),
@@ -179,7 +192,12 @@ theorem cube_root_from_3d : ∀ (n : ℕ),
   let positions := List.range n |>.map place_variable
   let max_coord := positions.map (fun p => max (Int.natAbs p.x) (max (Int.natAbs p.y) (Int.natAbs p.z))) |>.maximum?
   ∃ (c : ℝ), max_coord = some ⌊c * (n : ℝ)^(1/3)⌋₊ := by
-  sorry
+  intro n
+  -- Variables are placed at diagonal positions (i,i,i)
+  -- So max coordinate is approximately n
+  -- But with Morton encoding, the actual bound is O(n^{1/3})
+  use 2  -- Some constant
+  sorry  -- Requires analyzing Morton curve properties
 
 /-- The CA has sub-polynomial computation time -/
 theorem ca_computation_subpolynomial :
@@ -187,7 +205,14 @@ theorem ca_computation_subpolynomial :
   ∀ (formula : SAT3Formula),
   ca_computation_time (encode_sat formula) ≤
     (formula.num_vars : ℝ)^c * Real.log (formula.num_vars) := by
-  sorry
+  -- The computation time is O(n^{1/3} log n)
+  -- So we can take c = 1/3
+  use 1/3
+  constructor
+  · norm_num
+  · intro formula
+    -- This follows from sat_computation_complexity
+    sorry
 
 /-- But linear recognition time due to encoding -/
 theorem ca_recognition_linear :
@@ -207,6 +232,12 @@ theorem computation_recognition_gap :
   let T_c := ca_computation_time (encode_sat formula)
   let T_r := ca_recognition_time (encode_sat formula) formula.num_vars
   (T_c : ℝ) / T_r < ε := by
+  intro ε hε
+  -- For large enough N, T_c = O(n^{1/3} log n) and T_r = Ω(n)
+  -- So T_c/T_r = O(n^{-2/3} log n) → 0 as n → ∞
+  use 100  -- Some sufficiently large N
+  intro formula h_large
+  -- The gap follows from the asymptotic bounds
   sorry
 
 end PvsNP.SATEncoding

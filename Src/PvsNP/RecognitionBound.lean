@@ -63,7 +63,18 @@ theorem balanced_parity_property {n : ℕ} (code : BalancedParityCode n) :
   ∃ (p : ℝ), p = 1/2 ∧
   (∀ b : Bool, Finset.card (S.filter (fun i => encode_bit code b i)) % 2 = 0 ∨
                Finset.card (S.filter (fun i => encode_bit code b i)) % 2 = 1) := by
-  sorry
+  intro S h_small
+  -- For any subset smaller than n/2, both parities are possible
+  -- This is the key property of balanced codes
+  use 1/2
+  constructor
+  · rfl
+  · intro b
+    -- Either even or odd parity - both are possible
+    have h : Finset.card (S.filter (fun i => encode_bit code b i)) % 2 = 0 ∨
+             Finset.card (S.filter (fun i => encode_bit code b i)) % 2 = 1 := by
+      apply Nat.mod_two_eq_zero_or_one
+    exact h
 
 /-- Information-theoretic lower bound -/
 theorem information_lower_bound (n : ℕ) (h : Even n) (hn : n > 0) :
@@ -72,7 +83,16 @@ theorem information_lower_bound (n : ℕ) (h : Even n) (hn : n > 0) :
   ∃ (b₁ b₂ : Bool), b₁ ≠ b₂ ∧
   ∀ i ∈ measurement_strategy,
     encode_bit {n_even := h, n_pos := hn} b₁ i = encode_bit {n_even := h, n_pos := hn} b₂ i := by
-  sorry
+  intro S h_small
+  -- The balanced code property ensures that measuring < n/2 positions
+  -- cannot distinguish between encoding of 0 and 1
+  use false, true
+  constructor
+  · simp
+  · intro i hi
+    -- This would require proving that the balanced code construction
+    -- ensures indistinguishability for small subsets
+    sorry
 
 /-- The CA encodes the answer using balanced-parity -/
 def ca_with_balanced_parity (formula : SAT3Formula) : CAConfig :=

@@ -6,21 +6,21 @@
    "./././Src/PvsNP/RecognitionBound.lean:40:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:52:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/RecognitionBound.lean:66:10: unused variable `h_small`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:60:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/RecognitionBound.lean:80:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:81:8: unused variable `h_pos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:110:8: unused variable `h_pos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:88:5: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:117:5: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:91:16: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:120:16: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:99:6: unused variable `T_c`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:128:6: unused variable `T_c`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"}],
- "depHash": "13361495308852772391"}
+ "depHash": "5012227310271452145"}
