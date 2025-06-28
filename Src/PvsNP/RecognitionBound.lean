@@ -34,6 +34,14 @@ def encode_bit {n : ℕ} (code : BalancedParityCode n) (b : Bool) : Fin n → Bo
     -- For bit 0, use mask directly
     code.mask
 
+/-- Helper: The mask has exactly n/2 ones -/
+lemma mask_count_ones {n : ℕ} (code : BalancedParityCode n) :
+  (Finset.univ.filter (fun i => code.mask i)).card = n / 2 := by
+  -- The mask is defined as i ↦ (i.val % 2 = 1)
+  -- So it's true for odd indices: 1, 3, 5, ..., n-1
+  -- For even n, there are exactly n/2 odd numbers in [0, n)
+  sorry
+
 /-- The parity of encoded bit differs for 0 and 1
 This is a fundamental property of balanced-parity encoding schemes -/
 @[simp]
@@ -47,8 +55,9 @@ theorem encoded_parity_correct {n : ℕ} (code : BalancedParityCode n) (b : Bool
   | false =>
     -- For b = false, encode_bit returns code.mask
     simp [encode_bit]
-    -- The mask alternates 0,1,0,1,... so has n/2 ones
-    -- Since n is even, n/2 is even, so parity is 0
+    -- The mask has n/2 ones by mask_count_ones
+    -- Since n is even, n/2 could be even or odd
+    -- We need n/2 to be even for parity 0
     sorry
   | true =>
     -- For b = true, encode_bit flips position 0
