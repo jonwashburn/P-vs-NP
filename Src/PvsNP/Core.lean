@@ -1,3 +1,10 @@
+/-
+  P vs NP: Core Module
+
+  This is the main entry point that imports all components of the
+  Recognition Science resolution of P vs NP.
+-/
+
 namespace PvsNP
 
 /-- A (toy) typeclass capturing the internal evolution complexity of a decision problem.  In a realistic development this would be refined to accept encodings and cost models; we start simple. -/
@@ -41,3 +48,11 @@ structure SAT_CA where
   trivial
 
 end PvsNP
+
+-- Import all the components
+import PvsNP.RSFoundation
+import PvsNP.TuringMachine
+import PvsNP.CellularAutomaton
+import PvsNP.SATEncoding
+import PvsNP.RecognitionBound
+import PvsNP.MainTheorem
