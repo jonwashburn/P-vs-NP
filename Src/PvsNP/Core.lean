@@ -76,14 +76,15 @@ theorem p_vs_np_ill_posed : ¬classical_assumption := by
 
   -- Get contradiction at n = 1
   specialize h_bound p 1
-  -- h_bound says: T_r(1) ≤ bound
-  -- But T_r(1) = bound + 1 + 1 = bound + 2 > bound
-  -- By definition of recog_inst and p:
-  -- HasRecognitionComplexity.recognition p 1 = p.T_r 1 = bound + 1 + 1
-  have h_eq : HasRecognitionComplexity.recognition p 1 = p.T_r 1 := rfl
-  have h_val : p.T_r 1 = bound + 1 + 1 := rfl
-  rw [h_eq, h_val] at h_bound
-  -- h_bound : bound + 1 + 1 ≤ bound
-  linarith
+  -- h_bound says: HasRecognitionComplexity.recognition p 1 ≤ bound
+  -- But by our instance, HasRecognitionComplexity.recognition p 1 = p.T_r 1 = bound + 1 + 1
+  -- Since p.T_r 1 = bound + 1 + 1 > bound, we get a contradiction
+  suffices p.T_r 1 > bound by
+    -- recog_inst.recognition p 1 = p.T_r 1 by definition
+    have : @HasRecognitionComplexity.recognition _ recog_inst p 1 = p.T_r 1 := rfl
+    linarith
+  -- Show p.T_r 1 > bound
+  simp [SeparatedProblem.T_r]
+  norm_num
 
 end PvsNP
