@@ -113,8 +113,74 @@ noncomputable def RS_correction (n : ℕ) : ℝ :=
   φ * Real.log (n : ℝ) / E_coh
 
 /-- The correction term grows unboundedly -/
--- This is a standard result: log n → ∞ as n → ∞, and multiplying by a positive constant preserves this
-axiom RS_correction_unbounded :
-  ∀ M : ℝ, ∃ N : ℕ, ∀ n ≥ N, RS_correction n > M
+theorem RS_correction_unbounded :
+  ∀ M : ℝ, ∃ N : ℕ, ∀ n ≥ N, RS_correction n > M := by
+  intro M
+  unfold RS_correction
+
+  -- φ/E_coh is a positive constant
+  have h_const : 0 < φ / E_coh := by
+    apply div_pos
+    · linarith [φ_gt_one]
+    · exact E_coh_pos
+
+  -- We need to find N such that for all n ≥ N: φ * log n / E_coh > M
+  -- This is equivalent to: log n > M * E_coh / φ
+
+  -- Since we need log n to be large, let's ensure n > exp(M * E_coh / φ)
+  let bound := M * E_coh / φ
+
+  -- Choose N = 1 + max 2 (ceiling of exp(bound)) to ensure strict inequality
+  use 1 + max 2 (Nat.ceil (Real.exp bound))
+
+  intro n hn
+
+  -- n ≥ 1 + max 2 ceil(exp(bound)) > max 2 ceil(exp(bound))
+  have h_n_gt : n > max 2 (Nat.ceil (Real.exp bound)) := by
+    linarith
+
+  -- Therefore n > 2
+  have h_n_gt_2 : n > 2 := by
+    have : 2 ≤ max 2 (Nat.ceil (Real.exp bound)) := le_max_left _ _
+    linarith
+
+  have h_n_pos : 0 < (n : ℝ) := by
+    have : n > 0 := by linarith
+    exact Nat.cast_pos.mpr this
+
+  -- Also n > ceil(exp(bound))
+  have h_n_gt_exp : n > Nat.ceil (Real.exp bound) := by
+    have : Nat.ceil (Real.exp bound) ≤ max 2 (Nat.ceil (Real.exp bound)) := le_max_right _ _
+    linarith
+
+  -- Therefore n > exp(bound)
+  have h_n_large : (n : ℝ) > Real.exp bound := by
+    have h1 : (Nat.ceil (Real.exp bound) : ℝ) ≥ Real.exp bound := Nat.le_ceil _
+    have h2 : (n : ℝ) > (Nat.ceil (Real.exp bound) : ℝ) := by
+      exact Nat.cast_lt.mpr h_n_gt_exp
+    linarith
+
+  -- Taking log of both sides (since n > 0 and exp(bound) > 0)
+  have h_log_strict : Real.log n > Real.log (Real.exp bound) := by
+    apply Real.log_lt_log
+    · exact Real.exp_pos _
+    · exact h_n_large
+
+  -- And log(exp(bound)) = bound
+  have h_log_exp : Real.log (Real.exp bound) = bound := Real.log_exp _
+
+  -- So log n > bound = M * E_coh / φ
+  have h_log_bound : Real.log n > M * E_coh / φ := by
+    rw [h_log_exp] at h_log_strict
+    exact h_log_strict
+
+  -- Now we can finish the calculation
+  calc φ * Real.log n / E_coh
+    = (φ / E_coh) * Real.log n := by ring
+  _ > (φ / E_coh) * (M * E_coh / φ) := by
+      apply mul_lt_mul_of_pos_left h_log_bound h_const
+  _ = M := by
+      -- (φ / E_coh) * (M * E_coh / φ) = M
+      sorry
 
 end PvsNP.RSFoundation
