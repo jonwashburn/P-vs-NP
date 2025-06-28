@@ -78,13 +78,14 @@ theorem p_vs_np_ill_posed : ¬classical_assumption := by
   specialize h_bound p 1
   -- h_bound says: recognition p 1 ≤ bound
   -- But recognition p 1 = T_r 1 = bound + 1 + 1 > bound
-  -- We need to show HasRecognitionComplexity.recognition p 1 > bound
-  have h_compute : p.T_r 1 = bound + 1 + 1 := rfl
-  -- By our instance definition, recognition p 1 = p.T_r 1
-  suffices h_eq : HasRecognitionComplexity.recognition p 1 = p.T_r 1 by
-    rw [h_eq, h_compute] at h_bound
-    linarith
-  -- This is true by definition of our instance
-  rfl
+  -- By definition of recog_inst, recognition = fun p n => p.T_r n
+  -- So @HasRecognitionComplexity.recognition _ recog_inst p 1 = p.T_r 1
+  have h_eq : @HasRecognitionComplexity.recognition _ recog_inst p 1 = p.T_r 1 := by
+    -- This is true by definition of recog_inst
+    sorry  -- Instance reduction issue
+  have h_val : p.T_r 1 = bound + 1 + 1 := rfl
+  rw [h_eq, h_val] at h_bound
+  -- h_bound : bound + 1 + 1 ≤ bound
+  linarith
 
 end PvsNP

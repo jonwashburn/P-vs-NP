@@ -1,6 +1,6 @@
 // Lean compiler output
 // Module: PvsNP.SATEncoding
-// Imports: Init Mathlib.Data.Real.Basic Mathlib.Analysis.SpecialFunctions.Log.Basic Mathlib.Analysis.SpecialFunctions.Pow.Real PvsNP.Core PvsNP.RSFoundation PvsNP.CellularAutomaton
+// Imports: Init Mathlib.Data.Real.Basic Mathlib.Analysis.SpecialFunctions.Log.Basic Mathlib.Analysis.SpecialFunctions.Pow.Real PvsNP.Core PvsNP.RSFoundation PvsNP.CellularAutomaton Mathlib.Data.Nat.Cast.Basic Mathlib.Data.Nat.Bits Mathlib.Data.List.Basic Mathlib.Data.List.Range Mathlib.Data.Fintype.Card
 #include <lean/lean.h>
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -23,12 +23,15 @@ uint8_t l_List_any___rarg(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__encode(lean_object*, lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_List_mapTR_loop___at_PvsNP_SATEncoding_place__clause___spec__4(lean_object*, lean_object*);
 lean_object* lean_nat_shiftr(lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__decode__simple___boxed(lean_object*);
 lean_object* l_List_appendTR___rarg(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_List_foldl___at_PvsNP_SATEncoding_place__clause___spec__3___boxed(lean_object*, lean_object*);
 uint8_t l___private_PvsNP_CellularAutomaton_0__PvsNP_CellularAutomaton_decEqPosition3D____x40_PvsNP_CellularAutomaton___hyg_341_(lean_object*, lean_object*);
 lean_object* lean_nat_to_int(lean_object*);
 LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_encode__sat___boxed(lean_object*, lean_object*);
+lean_object* lean_nat_div(lean_object*, lean_object*);
 lean_object* l_List_range(lean_object*);
+LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__encode__simple(lean_object*, lean_object*, lean_object*);
 LEAN_EXPORT uint8_t l_PvsNP_SATEncoding_encode__sat___lambda__3(lean_object*, lean_object*);
 lean_object* lean_array_to_list(lean_object*, lean_object*);
 static lean_object* l_PvsNP_SATEncoding_place__clause___closed__2;
@@ -48,10 +51,13 @@ LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_encode__sat___lambda__2___boxed(lea
 LEAN_EXPORT lean_object* l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter___rarg___boxed(lean_object*, lean_object*, lean_object*);
 uint8_t lean_nat_dec_eq(lean_object*, lean_object*);
 LEAN_EXPORT uint8_t l_PvsNP_SATEncoding_encode__sat___lambda__2(lean_object*, lean_object*);
+lean_object* lean_nat_mod(lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__decode__simple(lean_object*);
 LEAN_EXPORT uint8_t l_PvsNP_SATEncoding_encode__sat___lambda__1(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter(lean_object*);
 lean_object* lean_nat_shiftl(lean_object*, lean_object*);
 lean_object* lean_nat_sub(lean_object*, lean_object*);
+lean_object* lean_nat_mul(lean_object*, lean_object*);
 lean_object* l_List_foldl___at_Array_appendList___spec__1___rarg(lean_object*, lean_object*);
 lean_object* l_List_reverse___rarg(lean_object*);
 LEAN_EXPORT lean_object* l_List_sum___at_PvsNP_SATEncoding_place__clause___spec__2___boxed(lean_object*);
@@ -59,7 +65,9 @@ LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__decode(lean_object*);
 lean_object* lean_int_add(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_List_mapTR_loop___at_PvsNP_SATEncoding_place__clause___spec__5(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__encode___boxed(lean_object*, lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__encode__simple___boxed(lean_object*, lean_object*, lean_object*);
 lean_object* lean_int_ediv(lean_object*, lean_object*);
+lean_object* lean_nat_add(lean_object*, lean_object*);
 lean_object* l_List_enumFrom___rarg(lean_object*, lean_object*);
 lean_object* lean_nat_lor(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_List_mapTR_loop___at_PvsNP_SATEncoding_place__clause___spec__1(lean_object*, lean_object*);
@@ -270,6 +278,62 @@ lean_ctor_set(x_17, 0, x_12);
 lean_ctor_set(x_17, 1, x_16);
 return x_17;
 }
+}
+}
+LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__encode__simple(lean_object* x_1, lean_object* x_2, lean_object* x_3) {
+_start:
+{
+lean_object* x_4; lean_object* x_5; lean_object* x_6; lean_object* x_7; lean_object* x_8; lean_object* x_9; 
+x_4 = lean_unsigned_to_nat(1024u);
+x_5 = lean_nat_mul(x_4, x_2);
+x_6 = lean_nat_add(x_1, x_5);
+lean_dec(x_5);
+x_7 = lean_unsigned_to_nat(1048576u);
+x_8 = lean_nat_mul(x_7, x_3);
+x_9 = lean_nat_add(x_6, x_8);
+lean_dec(x_8);
+lean_dec(x_6);
+return x_9;
+}
+}
+LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__encode__simple___boxed(lean_object* x_1, lean_object* x_2, lean_object* x_3) {
+_start:
+{
+lean_object* x_4; 
+x_4 = l_PvsNP_SATEncoding_morton__encode__simple(x_1, x_2, x_3);
+lean_dec(x_3);
+lean_dec(x_2);
+lean_dec(x_1);
+return x_4;
+}
+}
+LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__decode__simple(lean_object* x_1) {
+_start:
+{
+lean_object* x_2; lean_object* x_3; lean_object* x_4; lean_object* x_5; lean_object* x_6; lean_object* x_7; lean_object* x_8; lean_object* x_9; 
+x_2 = lean_unsigned_to_nat(1048576u);
+x_3 = lean_nat_div(x_1, x_2);
+x_4 = lean_nat_mod(x_1, x_2);
+x_5 = lean_unsigned_to_nat(1024u);
+x_6 = lean_nat_div(x_4, x_5);
+x_7 = lean_nat_mod(x_4, x_5);
+lean_dec(x_4);
+x_8 = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(x_8, 0, x_6);
+lean_ctor_set(x_8, 1, x_3);
+x_9 = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(x_9, 0, x_7);
+lean_ctor_set(x_9, 1, x_8);
+return x_9;
+}
+}
+LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__decode__simple___boxed(lean_object* x_1) {
+_start:
+{
+lean_object* x_2; 
+x_2 = l_PvsNP_SATEncoding_morton__decode__simple(x_1);
+lean_dec(x_1);
+return x_2;
 }
 }
 LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_place__variable(lean_object* x_1) {
@@ -849,6 +913,11 @@ lean_object* initialize_Mathlib_Analysis_SpecialFunctions_Pow_Real(uint8_t built
 lean_object* initialize_PvsNP_Core(uint8_t builtin, lean_object*);
 lean_object* initialize_PvsNP_RSFoundation(uint8_t builtin, lean_object*);
 lean_object* initialize_PvsNP_CellularAutomaton(uint8_t builtin, lean_object*);
+lean_object* initialize_Mathlib_Data_Nat_Cast_Basic(uint8_t builtin, lean_object*);
+lean_object* initialize_Mathlib_Data_Nat_Bits(uint8_t builtin, lean_object*);
+lean_object* initialize_Mathlib_Data_List_Basic(uint8_t builtin, lean_object*);
+lean_object* initialize_Mathlib_Data_List_Range(uint8_t builtin, lean_object*);
+lean_object* initialize_Mathlib_Data_Fintype_Card(uint8_t builtin, lean_object*);
 static bool _G_initialized = false;
 LEAN_EXPORT lean_object* initialize_PvsNP_SATEncoding(uint8_t builtin, lean_object* w) {
 lean_object * res;
@@ -873,6 +942,21 @@ res = initialize_PvsNP_RSFoundation(builtin, lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
 res = initialize_PvsNP_CellularAutomaton(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Mathlib_Data_Nat_Cast_Basic(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Mathlib_Data_Nat_Bits(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Mathlib_Data_List_Basic(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Mathlib_Data_List_Range(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Mathlib_Data_Fintype_Card(builtin, lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
 l_List_sum___at_PvsNP_SATEncoding_place__clause___spec__2___closed__1 = _init_l_List_sum___at_PvsNP_SATEncoding_place__clause___spec__2___closed__1();
