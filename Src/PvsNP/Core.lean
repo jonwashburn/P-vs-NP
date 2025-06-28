@@ -20,12 +20,11 @@ structure DualComplexity (α : Type) where
   T_c : Nat → Nat
   T_r : Nat → Nat
 
-/-- Every problem that carries both typeclasses automatically gets a `DualComplexity`. -/
-instance (α) [HasComputationComplexity α] [HasRecognitionComplexity α] : Coe α (DualComplexity α) where
-  coe a := {
-    T_c := HasComputationComplexity.computation a,
-    T_r := HasRecognitionComplexity.recognition a
-  }
+/-- Construct DualComplexity from type class instances -/
+def DualComplexity.of (α : Type) [HasComputationComplexity α] [HasRecognitionComplexity α]
+    (input : α) : DualComplexity α :=
+  { T_c := HasComputationComplexity.computation input
+    T_r := HasRecognitionComplexity.recognition input }
 
 /-- **Turing-incompleteness lemma (informal)**
 The classical Turing model implicitly sets recognition cost to zero.  We state this as a placeholder theorem that will be proved later once we formalise Turing machines. -/
@@ -47,12 +46,9 @@ structure SAT_CA where
   -- TODO: information-theoretic proof
   trivial
 
-end PvsNP
+/-- A 16-state reversible cellular automaton. We will fill in the transition rules and prove its computation / recognition complexities in later files. -/
+structure SixteenStateCA where
+  -- Placeholder for the CA structure
+  dummy : Unit
 
--- Import all the components
-import PvsNP.RSFoundation
-import PvsNP.TuringMachine
-import PvsNP.CellularAutomaton
-import PvsNP.SATEncoding
-import PvsNP.RecognitionBound
-import PvsNP.MainTheorem
+end PvsNP

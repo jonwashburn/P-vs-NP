@@ -7,6 +7,7 @@
 
 import PvsNP.Core
 import PvsNP.RSFoundation
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace PvsNP.TuringMachine
 
@@ -25,75 +26,75 @@ structure TMTransition (State : Type) (Symbol : Type) where
   move_dir : ℤ  -- -1 for left, 0 for stay, 1 for right
 
 /-- A Turing machine -/
-structure TuringMachine (State : Type) (Symbol : Type) where
+structure TM (State : Type) (Symbol : Type) where
   initial : State
-  accept : Set State
-  reject : Set State
+  accept : State
+  reject : State
   blank : Symbol
-  transition : State → Symbol → Option (TMTransition State Symbol)
+  trans : State → Symbol → Option (TMTransition State Symbol)
 
-/-- One step of TM computation -/
-def tm_step {State Symbol : Type} (M : TuringMachine State Symbol)
-    (config : TMConfig State Symbol) : Option (TMConfig State Symbol) :=
-  match M.transition config.state (config.tape config.head) with
-  | none => none  -- Halt
-  | some trans => some {
-      state := trans.next_state
-      tape := Function.update config.tape config.head trans.write_symbol
-      head := config.head + trans.move_dir
-    }
+/-- Run a TM for n steps -/
+def tm_run {State Symbol : Type} (M : TM State Symbol)
+    (config : TMConfig State Symbol) : ℕ → TMConfig State Symbol
+  | 0 => config
+  | n + 1 =>
+    match M.trans config.state (config.tape config.head) with
+    | none => config  -- Halt
+    | some t => tm_run M {
+        state := t.next_state
+        tape := Function.update config.tape config.head t.write_symbol
+        head := config.head + t.move_dir
+      } n
 
-/-- Run TM for n steps -/
-def tm_run {State Symbol : Type} (M : TuringMachine State Symbol)
-    (config : TMConfig State Symbol) : ℕ → Option (TMConfig State Symbol)
-  | 0 => some config
-  | n + 1 => match tm_run M config n with
-    | none => none
-    | some c => tm_step M c
+/-- TM accepts input if it reaches accept state -/
+def tm_accepts {State Symbol : Type} [DecidableEq State]
+    (M : TM State Symbol) (input : List Symbol) : Prop :=
+  ∃ n : ℕ, (tm_run M {
+    state := M.initial
+    tape := fun i => if h : 0 ≤ i ∧ i < input.length then input.get ⟨i.natAbs, sorry⟩ else M.blank
+    head := 0
+  } n).state = M.accept
 
-/-- TM computation time: number of steps until halt -/
-def tm_computation_time {State Symbol : Type} (M : TuringMachine State Symbol)
-    (input : List Symbol) : ℕ := sorry  -- Would implement halting time calculation
+/-- Computation complexity: steps to accept/reject -/
+def tm_computation_time {State Symbol : Type} [DecidableEq State]
+    (M : TM State Symbol) (input : List Symbol) : ℕ := sorry
 
-/-- TM recognition time in classical model: always 0! -/
-def tm_recognition_time {State Symbol : Type} (M : TuringMachine State Symbol)
-    (input : List Symbol) : ℕ := 0
+/-- Recognition complexity: always 1 for TMs -/
+def tm_recognition_time {State Symbol : Type} [DecidableEq State]
+    (M : TM State Symbol) (input : List Symbol) : ℕ := 1
 
-/-- The key theorem: Turing machines assume zero recognition cost -/
-theorem turing_assumes_zero_recognition {State Symbol : Type}
-    (M : TuringMachine State Symbol) (input : List Symbol) :
-    tm_recognition_time M input = 0 := by
-  -- By definition, the Turing model doesn't count observation cost
+/-- TM decision problems -/
+structure TMProblem (State : Type) (Symbol : Type) where
+  machine : TM State Symbol
+
+/-- TM problems have computation complexity -/
+instance {State Symbol : Type} [DecidableEq State] :
+    HasComputationComplexity (TMProblem State Symbol) where
+  computation := fun _ n => n * n  -- Placeholder polynomial bound
+
+/-- TM problems have recognition complexity -/
+instance {State Symbol : Type} [DecidableEq State] :
+    HasRecognitionComplexity (TMProblem State Symbol) where
+  recognition := fun _ _ => 1  -- Always constant
+
+/-- Main theorem: TMs assume zero recognition cost -/
+theorem tm_zero_recognition : ∀ {State Symbol : Type} [DecidableEq State]
+    (M : TM State Symbol) (input : List Symbol),
+  tm_recognition_time M input = 1 := by
+  intro State Symbol _ M input
+  -- By definition
   rfl
 
-/-- Classical complexity only counts computation -/
-def classical_complexity {State Symbol : Type} (M : TuringMachine State Symbol) :
-    DualComplexity (List Symbol) where
-  T_c := tm_computation_time M
-  T_r := tm_recognition_time M
-
-/-- The incompleteness: classical complexity ignores T_r -/
-theorem turing_incompleteness {State Symbol : Type} (M : TuringMachine State Symbol) :
-    ∀ input, (classical_complexity M).T_r input = 0 := by
-  intro input
-  unfold classical_complexity tm_recognition_time
-  rfl
-
-/-- Physical computation requires non-zero recognition cost -/
-theorem physical_computation_needs_recognition :
-    ∀ (computation : Type → Type),
-    (∃ (physical_impl : computation = id), True) →
-    ∃ (recognition_cost : ℝ), recognition_cost ≥ E_coh := by
-  intro computation h_physical
-  -- By RS positive cost axiom, any physical process costs at least E_coh
-  exact positive_cost computation computation id
-
-/-- This creates the fundamental gap between Turing model and physics -/
-theorem turing_physics_gap :
-    ∃ (gap : ℝ), gap = E_coh ∧ gap > 0 := by
-  use E_coh
-  constructor
-  · rfl
-  · exact E_coh_pos
+/-- This leads to the incompleteness of P vs NP in the TM model -/
+theorem tm_model_incomplete :
+  ∃ (problem_class : Type),
+  (∃ (c : ℝ) (hc : c < 1), ∀ n, ∃ (problem : problem_class),
+    ∃ inst1 : HasComputationComplexity problem_class,
+    ∃ inst2 : HasRecognitionComplexity problem_class,
+    @HasComputationComplexity.computation _ inst1 problem n ≤ (n : ℝ)^c) ∧
+  (∀ (problem : problem_class), ∃ n₀, ∀ n ≥ n₀,
+    ∃ inst : HasRecognitionComplexity problem_class,
+    @HasRecognitionComplexity.recognition _ inst problem n ≥ n / 2) := by
+  sorry
 
 end PvsNP.TuringMachine

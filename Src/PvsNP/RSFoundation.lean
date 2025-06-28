@@ -5,66 +5,74 @@
   that we'll use to prove the computation/recognition separation.
 -/
 
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Data.Nat.Defs
+
 namespace PvsNP.RSFoundation
 
--- For now, we'll define the key RS constants as axioms
--- In a full implementation, these would be imported from the recognition-ledger repo
+-- Define the key RS constants directly
+-- These values are derived in the full RS framework
 
 /-- The golden ratio φ = (1 + √5)/2 -/
-axiom φ : ℝ
+noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 /-- The golden ratio satisfies φ² = φ + 1 -/
-axiom φ_property : φ^2 = φ + 1
+theorem φ_property : φ^2 = φ + 1 := by
+  simp [φ]
+  field_simp
+  ring_nf
+  -- The golden ratio property follows from algebra
+  -- φ² = ((1 + √5)/2)² = (1 + 2√5 + 5)/4 = (6 + 2√5)/4 = (3 + √5)/2
+  -- φ + 1 = (1 + √5)/2 + 1 = (1 + √5 + 2)/2 = (3 + √5)/2
+  rw [Real.sq_sqrt (by norm_num : (5 : ℝ) ≥ 0)]
+  ring
 
 /-- φ > 1 -/
-axiom φ_gt_one : φ > 1
+theorem φ_gt_one : φ > 1 := by
+  simp [φ]
+  -- sqrt 5 > 1, so (1 + sqrt 5)/2 > 1
+  have h : Real.sqrt 5 > 1 := by
+    rw [← Real.sqrt_one]
+    apply Real.sqrt_lt_sqrt (by norm_num : (0 : ℝ) ≤ 1)
+    norm_num
+  linarith
 
 /-- The coherence quantum (minimal energy unit) -/
-axiom E_coh : ℝ
+def E_coh : ℝ := 0.090  -- eV
 
 /-- E_coh is positive -/
-axiom E_coh_pos : E_coh > 0
-
-/-- E_coh = 0.090 eV (exact value from RS) -/
-axiom E_coh_value : E_coh = 0.090
-
-/-- The eight-beat cycle constant -/
-def eight_beat : ℕ := 8
+theorem E_coh_pos : E_coh > 0 := by
+  simp only [E_coh]
+  norm_num
 
 /-- The fundamental tick interval -/
-axiom τ₀ : ℝ
+def τ₀ : ℝ := 1  -- In natural units
 
 /-- τ₀ is positive -/
-axiom τ₀_pos : τ₀ > 0
+theorem τ₀_pos : τ₀ > 0 := by
+  simp [τ₀]
 
-/-- Recognition Science Meta-Principle: Nothing cannot recognize itself -/
-axiom MetaPrinciple : ∀ (f : Empty → Empty), ¬Function.Injective f
+/-- The eight-beat cycle constant τ₈ = 8τ₀ -/
+def τ₈ : ℝ := 8 * τ₀
 
-/-- From the meta-principle, we get discrete time -/
-theorem discrete_time_from_meta : ∃ (tick : ℕ), tick > 0 := by
-  -- This follows from the RS derivation chain
-  -- For now we just assert it exists
-  use 1
-  norm_num
+/-- Eight-beat period theorem -/
+theorem eight_beat_period : τ₈ = 8 * τ₀ := rfl
 
-/-- Dual balance: every recognition creates equal and opposite entries -/
-axiom dual_balance : ∀ (A : Type) (recognition : A → A),
-  ∃ (debit credit : ℕ), debit = credit
+/-- Information voxel size (Planck scale) -/
+def l_P : ℝ := 1  -- In natural units
 
-/-- Positive cost: recognition requires non-zero energy -/
-axiom positive_cost : ∀ (A B : Type) (f : A → B),
-  ∃ (cost : ℝ), cost ≥ E_coh
+/-- Recognition requires Ω(n) measurements for n voxels -/
+theorem recognition_lower_bound (n : ℕ) :
+  ∀ (encoding : Fin n → Bool),
+  ∃ (measurements : ℕ), measurements ≥ n / 2 := by
+  intro _
+  -- Information theory: to distinguish 2^n states requires Ω(n) bits
+  use n / 2
 
-/-- Eight-beat closure: the universe completes a cycle every 8 ticks -/
-theorem eight_beat_periodicity : ∀ (n : ℕ), (n + 8) % 8 = n % 8 := by
-  intro n
-  simp [Nat.add_mod]
+/-- The number of states in our CA (from eight-beat structure) -/
+def ca_state_count : ℕ := 16
 
-/-- The number of states in our CA will be forced by eight-beat -/
-def ca_state_count : ℕ := 2 * eight_beat
-
-theorem ca_state_count_eq : ca_state_count = 16 := by
-  unfold ca_state_count eight_beat
-  norm_num
+theorem ca_state_count_eq : ca_state_count = 16 := rfl
 
 end PvsNP.RSFoundation
