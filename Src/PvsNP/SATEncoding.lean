@@ -16,6 +16,8 @@ import Mathlib.Data.Nat.Bits
 import Mathlib.Data.List.Basic
 import Mathlib.Data.List.Range
 import Mathlib.Data.Fintype.Card
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Data.Nat.ModEq
 
 namespace PvsNP.SATEncoding
 
@@ -87,8 +89,14 @@ lemma morton_simple_inverse : ∀ x y z : ℕ,
   intro x y z hx hy hz
   simp [morton_encode_simple, morton_decode_simple]
   -- This is a standard property of base-1024 representation
-  -- x + 1024*y + 1024²*z with x,y,z < 1024 uniquely determines x,y,z
-  sorry
+  -- For the proof, we use division and modulo properties
+  have h_bound : x + 1024 * y < 1024 * 1024 := by
+    calc x + 1024 * y < 1024 + 1024 * 1024 := by linarith
+    _ = 1024 * 1025 := by ring
+    _ < 1024 * 1024 * 2 := by norm_num
+  -- The key insight: for n = x + 1024*y + 1024²*z with x,y < 1024:
+  -- n / 1024² = z, (n % 1024²) / 1024 = y, n % 1024 = x
+  sorry -- Division/modulo arithmetic with concrete bounds
 
 /-- Helper: Morton decode is left inverse of encode for small values -/
 lemma morton_decode_encode : ∀ x y z : ℕ,
@@ -137,12 +145,12 @@ theorem place_variable_correct : ∀ (v : ℕ),
   let pos := place_variable v
   pos.x = v ∧ pos.y = v ∧ pos.z = v := by
   intro v h
-  -- place_variable returns {x := v, y := v, z := v}
+  -- place_variable returns morton_decode (morton_encode v v v)
   simp [place_variable]
   -- Use the morton_decode_encode lemma
   have h_decode := morton_decode_encode v v v h h h
-  rw [h_decode]
-  simp
+  -- Extract components from the tuple
+  simp [h_decode]
 
 /-- Place a clause connecting its variables -/
 def place_clause (c : Clause) (clause_idx : ℕ) : List (Position3D × CAState) :=
@@ -232,6 +240,8 @@ theorem signal_speed : ∀ (config : CAConfig) (p q : Position3D),
     rw [ca_step]
     -- ca_step applies block_update
     -- Since q is far from all active positions, it remains unchanged
+    -- By block_update_affects_only_neighbors, if q is far from all centers,
+    -- then block_update doesn't change q
     sorry -- Would require showing q is not affected by block_update
 
 /-- The O(n^{1/3}) comes from 3D layout -/

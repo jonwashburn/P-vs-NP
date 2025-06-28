@@ -7,15 +7,15 @@
 
 import PvsNP.Core
 import PvsNP.RSFoundation
-import PvsNP.CellularAutomaton
 import PvsNP.SATEncoding
-import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Finset.Card
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Data.Nat.Parity
 
 namespace PvsNP.RecognitionBound
 
-open PvsNP PvsNP.RSFoundation PvsNP.CellularAutomaton PvsNP.SATEncoding
+open PvsNP PvsNP.RSFoundation PvsNP.SATEncoding
 
 /-- Balanced-parity encoding of a bit across n cells -/
 structure BalancedParityCode (n : ℕ) where
@@ -40,7 +40,13 @@ lemma mask_count_ones {n : ℕ} (code : BalancedParityCode n) :
   -- The mask is defined as i ↦ (i.val % 2 = 1)
   -- So it's true for odd indices: 1, 3, 5, ..., n-1
   -- For even n, there are exactly n/2 odd numbers in [0, n)
-  sorry -- Standard counting argument
+  have h_even : Even n := code.n_even
+  obtain ⟨k, hk⟩ := h_even
+  rw [hk]
+  -- Now n = 2*k, so we need to show there are k odd numbers in [0, 2k)
+  -- The odd numbers are: 1, 3, 5, ..., 2k-1
+  -- There are exactly k of them
+  sorry -- Standard counting of odd numbers in range
 
 /-- The parity of encoded bit differs for 0 and 1
 This is a fundamental property of balanced-parity encoding schemes -/
@@ -58,12 +64,23 @@ theorem encoded_parity_correct {n : ℕ} (code : BalancedParityCode n) (b : Bool
     -- The mask has n/2 ones by mask_count_ones
     -- Since n is even, n/2 could be even or odd
     -- We need n/2 to be even for parity 0
-    sorry -- Depends on n/2 being even
+    have h_count := mask_count_ones code
+    rw [h_count]
+    -- We need to show n/2 % 2 = 0
+    have h_even : Even n := code.n_even
+    obtain ⟨k, hk⟩ := h_even
+    rw [hk]
+    simp
+    -- 2k/2 = k, and k % 2 = 0 iff k is even
+    sorry -- Depends on whether k is even
   | true =>
     -- For b = true, encode_bit flips position 0
     simp [encode_bit]
-    -- If mask(0) = 0 (which it is), flipping gives 1 more one
-    -- So we have n/2 + 1 ones, which has parity 1
+    -- If mask(0) = false (which it is since 0 is even), flipping gives 1 more one
+    -- So we have (n/2 + 1) ones, which has parity 1
+    have h_mask_zero : code.mask ⟨0, code.n_pos⟩ = false := by
+      simp [BalancedParityCode.mask]
+    -- Count the ones after flipping bit 0
     sorry -- Counting argument with flipped bit
 
 /-- Any subset of size < n/2 reveals no information -/
@@ -100,7 +117,9 @@ theorem information_lower_bound (n : ℕ) (h : Even n) (hn : n > 0) :
   · simp
   · intro i hi
     -- This follows from the balanced code construction
-    sorry -- Balanced code indistinguishability
+    -- The key insight: with < n/2 measurements, we can't determine parity
+    -- because both encodings agree on many positions
+    sorry -- Balanced code indistinguishability property
 
 /-- The CA encodes the answer using balanced-parity -/
 def ca_with_balanced_parity (formula : SAT3Formula) : CAConfig :=
