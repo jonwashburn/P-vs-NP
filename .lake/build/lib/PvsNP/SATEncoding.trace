@@ -1,0 +1,28 @@
+{"log":
+ [{"message":
+   ".> LEAN_PATH=././.lake/packages/batteries/.lake/build/lib:././.lake/packages/Qq/.lake/build/lib:././.lake/packages/aesop/.lake/build/lib:././.lake/packages/proofwidgets/.lake/build/lib:././.lake/packages/Cli/.lake/build/lib:././.lake/packages/importGraph/.lake/build/lib:././.lake/packages/LeanSearchClient/.lake/build/lib:././.lake/packages/mathlib/.lake/build/lib:././.lake/build/lib DYLD_LIBRARY_PATH= /Users/jonathanwashburn/.elan/toolchains/leanprover--lean4---v4.12.0/bin/lean -DautoImplicit=false ./././Src/PvsNP/SATEncoding.lean -R ./././Src -o ././.lake/build/lib/PvsNP/SATEncoding.olean -i ././.lake/build/lib/PvsNP/SATEncoding.ilean -c ././.lake/build/ir/PvsNP/SATEncoding.c --json",
+   "level": "trace"},
+  {"message": "./././Src/PvsNP/SATEncoding.lean:65:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:81:31: unused variable `clause_idx`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:96:37: unused variable `vpos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:116:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:131:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:149:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:158:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:178:8: declaration uses 'sorry'",
+   "level": "warning"}],
+ "depHash": "6935909034136714983"}

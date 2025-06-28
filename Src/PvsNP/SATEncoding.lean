@@ -68,7 +68,8 @@ theorem morton_injective : ∀ x1 y1 z1 x2 y2 z2 : ℕ,
   intro x1 y1 z1 x2 y2 z2 h
   -- The encoding interleaves bits uniquely
   -- So equal encodings imply equal inputs
-  sorry  -- Full proof would show bit-by-bit correspondence
+  -- For now, we axiomatize this property
+  sorry  -- Morton encoding correctly interleaves bits
 
 /-- Place a variable at its Morton position -/
 def place_variable (n : ℕ) : Position3D :=
@@ -134,7 +135,15 @@ theorem signal_speed : ∀ (config : CAConfig) (p q : Position3D),
   intro config p q dist n hn
   -- Signals cannot travel faster than 1 cell per tick
   -- This follows from locality of CA rules
-  sorry
+  -- We prove by induction on n
+  induction n with
+  | zero =>
+    -- At time 0, nothing has changed
+    rfl
+  | succ k ih =>
+    -- At time k+1, changes can only affect neighbors
+    -- Since k+1 < dist, q is still too far to be affected
+    sorry  -- Would require detailed CA rule analysis
 
 /-- The O(n^{1/3}) comes from 3D layout -/
 theorem cube_root_from_3d : ∀ (n : ℕ),
@@ -174,6 +183,13 @@ theorem computation_recognition_gap :
   let T_c := ca_computation_time (encode_sat formula)
   let T_r := ca_recognition_time (encode_sat formula) formula.num_vars
   (T_c : ℝ) / T_r < ε := by
-  sorry
+  intro ε hε
+  -- Choose N large enough that n^{1/3} log n / (n/2) < ε
+  -- This happens when n^{2/3} / log n > 1/ε
+  use max 100 ⌈2 / ε⌉₊  -- Ensure N is large enough
+  intro formula hN
+  -- T_c is O(n^{1/3} log n) and T_r is Ω(n)
+  -- So T_c / T_r → 0 as n → ∞
+  sorry  -- Would require the full complexity bounds
 
 end PvsNP.SATEncoding

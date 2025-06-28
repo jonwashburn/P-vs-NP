@@ -51,13 +51,33 @@ def tm_accepts {State Symbol : Type} [DecidableEq State]
     (M : TM State Symbol) (input : List Symbol) : Prop :=
   ∃ n : ℕ, (tm_run M {
     state := M.initial
-    tape := fun i => if h : 0 ≤ i ∧ i < input.length then input.get ⟨i.natAbs, sorry⟩ else M.blank
+    tape := fun i =>
+      if h : 0 ≤ i ∧ i.natAbs < input.length then
+        input.get ⟨i.natAbs, h.2⟩
+      else M.blank
     head := 0
   } n).state = M.accept
 
 /-- Computation complexity: steps to accept/reject -/
 def tm_computation_time {State Symbol : Type} [DecidableEq State]
-    (M : TM State Symbol) (input : List Symbol) : ℕ := sorry
+    (M : TM State Symbol) (input : List Symbol) : ℕ :=
+  -- Find the minimum n such that the TM halts (reaches accept or reject)
+  -- For simplicity, we'll use a large bound (input.length^2) as maximum steps
+  let max_steps := input.length * input.length + 1
+  let initial_config : TMConfig State Symbol := {
+    state := M.initial
+    tape := fun i =>
+      if h : 0 ≤ i ∧ i.natAbs < input.length then
+        input.get ⟨i.natAbs, h.2⟩
+      else M.blank
+    head := 0
+  }
+  -- Find first n where machine halts
+  match (List.range max_steps).find? (fun n =>
+    let config := tm_run M initial_config n
+    config.state = M.accept ∨ config.state = M.reject) with
+  | some n => n
+  | none => max_steps  -- Default to max if doesn't halt
 
 /-- Recognition complexity: always 1 for TMs -/
 def tm_recognition_time {State Symbol : Type} [DecidableEq State]
@@ -95,6 +115,8 @@ theorem tm_model_incomplete :
   (∀ (problem : problem_class), ∃ n₀, ∀ n ≥ n₀,
     ∃ inst : HasRecognitionComplexity problem_class,
     @HasRecognitionComplexity.recognition _ inst problem n ≥ n / 2) := by
-  sorry
+  -- We demonstrate this using a hypothetical problem class
+  -- In the full development, this would be SAT with our CA implementation
+  sorry  -- This requires the full CA development from other files
 
 end PvsNP.TuringMachine

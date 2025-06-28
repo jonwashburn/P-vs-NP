@@ -36,7 +36,10 @@ def encode_bit {n : ℕ} (code : BalancedParityCode n) (b : Bool) : Fin n → Bo
 /-- The parity of encoded bit matches the original -/
 theorem encoded_parity_correct {n : ℕ} (code : BalancedParityCode n) (b : Bool) :
   (Finset.univ.filter (fun i => encode_bit code b i)).card % 2 = if b then 1 else 0 := by
-  sorry
+  -- The encoding is designed so that:
+  -- - For b = false: we use the mask, which has n/2 ones (even parity)
+  -- - For b = true: we use complement of mask, which has n/2 ones (odd parity)
+  sorry  -- Would require detailed counting argument
 
 /-- Any subset of size < n/2 has equal probability of parity 0 or 1 -/
 theorem balanced_parity_property {n : ℕ} (code : BalancedParityCode n) :
@@ -94,7 +97,8 @@ theorem fundamental_gap :
   intro formula
   constructor
   · -- Computation bound from SATEncoding
-    sorry
+    -- This follows from ca_computation_subpolynomial in SATEncoding
+    sorry  -- Would reference the O(n^{1/3} log n) bound
   · -- Recognition bound
     simp only [ge_iff_le, le_refl]
 

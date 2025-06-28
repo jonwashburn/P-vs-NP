@@ -1,0 +1,7 @@
+{"log":
+ [{"message":
+   ".> LEAN_PATH=././.lake/packages/batteries/.lake/build/lib:././.lake/packages/Qq/.lake/build/lib:././.lake/packages/aesop/.lake/build/lib:././.lake/packages/proofwidgets/.lake/build/lib:././.lake/packages/Cli/.lake/build/lib:././.lake/packages/importGraph/.lake/build/lib:././.lake/packages/LeanSearchClient/.lake/build/lib:././.lake/packages/mathlib/.lake/build/lib:././.lake/build/lib DYLD_LIBRARY_PATH= /Users/jonathanwashburn/.elan/toolchains/leanprover--lean4---v4.12.0/bin/lean -DautoImplicit=false ./././Src/PvsNP/MainTheorem.lean -R ./././Src -o ././.lake/build/lib/PvsNP/MainTheorem.olean -i ././.lake/build/lib/PvsNP/MainTheorem.ilean -c ././.lake/build/ir/PvsNP/MainTheorem.c --json",
+   "level": "trace"},
+  {"message": "./././Src/PvsNP/MainTheorem.lean:21:8: declaration uses 'sorry'",
+   "level": "warning"}],
+ "depHash": "8145248523110938185"}
