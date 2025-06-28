@@ -40,7 +40,21 @@ lemma mask_count_ones {n : ℕ} (code : BalancedParityCode n) :
   -- The mask is defined as i ↦ (i.val % 2 = 1)
   -- So it's true for odd indices: 1, 3, 5, ..., n-1
   -- For even n, there are exactly n/2 odd numbers in [0, n)
-  sorry
+  -- Count the odd numbers in range [0, n)
+  have h_count : (Finset.univ.filter (fun (i : Fin n) => i.val % 2 = 1)).card = n / 2 := by
+    -- This is a standard counting argument
+    sorry -- Would require detailed counting proof
+  -- The mask is exactly the odd indices
+  have h_eq : Finset.univ.filter (fun i => code.mask i) =
+              Finset.univ.filter (fun (i : Fin n) => i.val % 2 = 1) := by
+    ext i
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    -- code.mask i = (i.val % 2 = 1) by definition
+    show code.mask i = true ↔ i.val % 2 = 1
+    -- Both sides are decidable
+    rw [decide_eq_decide]
+    simp [BalancedParityCode.mask]
+  rw [h_eq, h_count]
 
 /-- The parity of encoded bit differs for 0 and 1
 This is a fundamental property of balanced-parity encoding schemes -/
