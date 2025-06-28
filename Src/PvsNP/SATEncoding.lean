@@ -220,9 +220,9 @@ theorem signal_speed : ∀ (config : CAConfig) (p q : Position3D),
     -- By IH, (ca_run config k) q = config q
     -- So we need to show ca_step preserves this
     rw [ca_step]
-    -- ca_step applies block_update at each position
-    -- Since q hasn't changed and is far from any changes, it remains unchanged
-    sorry -- Requires proving that block_update is local
+    -- ca_step applies block_update
+    -- Since q is far from all active positions, it remains unchanged
+    sorry -- Would require showing q is not affected by block_update
 
 /-- The O(n^{1/3}) comes from 3D layout -/
 theorem layout_diameter_bound (formula : SAT3Formula) :
