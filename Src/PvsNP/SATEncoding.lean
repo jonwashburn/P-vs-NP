@@ -113,14 +113,9 @@ theorem morton_injective : ∀ x1 y1 z1 x2 y2 z2 : ℕ,
   have h1 := morton_decode_encode x1 y1 z1 hx1 hy1 hz1
   have h2 := morton_decode_encode x2 y2 z2 hx2 hy2 hz2
   -- Since morton_encode x1 y1 z1 = morton_encode x2 y2 z2
-  -- morton_decode (morton_encode x1 y1 z1) = morton_decode (morton_encode x2 y2 z2)
-  rw [←h_eq] at h2
-  -- Now h1: morton_decode (morton_encode x1 y1 z1) = (x1, y1, z1)
-  -- And h2: morton_decode (morton_encode x1 y1 z1) = (x2, y2, z2)
-  rw [h1] at h2
-  -- h2 : (x1, y1, z1) = (x2, y2, z2)
-  simp at h2
-  exact h2
+  -- We have morton_decode (morton_encode x1 y1 z1) = morton_decode (morton_encode x2 y2 z2)
+  rw [h_eq] at h1
+  rw [h1, h2]
 
 /-- Place a variable at its Morton position -/
 def place_variable (n : ℕ) : Position3D :=
