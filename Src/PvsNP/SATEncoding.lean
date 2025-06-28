@@ -197,7 +197,9 @@ theorem block_update_affects_only_neighbors (config : CAConfig) (center : Positi
   intro p h_far
   -- block_update only modifies cells within distance 1 of some position
   -- If p is far from all active positions, it remains unchanged
-  sorry -- Would require expanding the definition of block_update
+  -- By definition of block_update, it applies local rules
+  -- Cells more than distance 1 away are not neighbors
+  sorry -- Would require expanding block_update definition
 
 /-- Signals propagate at light speed (1 cell per tick) -/
 theorem signal_speed : ∀ (config : CAConfig) (p q : Position3D),
