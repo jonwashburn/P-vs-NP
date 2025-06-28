@@ -23,6 +23,6 @@
    "./././Src/PvsNP/SATEncoding.lean:158:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:178:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:193:8: declaration uses 'sorry'",
    "level": "warning"}],
- "depHash": "8663717782977551511"}
+ "depHash": "7996334201111637455"}

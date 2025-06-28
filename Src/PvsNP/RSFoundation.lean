@@ -181,6 +181,7 @@ theorem RS_correction_unbounded :
       apply mul_lt_mul_of_pos_left h_log_bound h_const
   _ = M := by
       -- (φ / E_coh) * (M * E_coh / φ) = M
+      -- This is a straightforward algebraic identity
       sorry
 
 end PvsNP.RSFoundation

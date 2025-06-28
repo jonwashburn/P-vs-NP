@@ -68,8 +68,17 @@ theorem morton_injective : ∀ x1 y1 z1 x2 y2 z2 : ℕ,
   intro x1 y1 z1 x2 y2 z2 h
   -- The encoding interleaves bits uniquely
   -- So equal encodings imply equal inputs
-  -- For now, we axiomatize this property
-  sorry  -- Morton encoding correctly interleaves bits
+  -- This follows from the fact that morton_decode is the inverse
+  have inv : ∀ x y z, morton_decode (morton_encode x y z) = (x, y, z) := by
+    intro x y z
+    -- This would require proving the inverse property
+    sorry
+  -- Apply the inverse to both sides of h
+  have h1 := congr_arg morton_decode h
+  rw [inv, inv] at h1
+  injection h1 with h2 h3
+  injection h3 with h4 h5
+  exact ⟨h2, h4, h5⟩
 
 /-- Place a variable at its Morton position -/
 def place_variable (n : ℕ) : Position3D :=
@@ -163,7 +172,22 @@ theorem ca_computation_subpolynomial :
   use 1/3
   constructor
   · norm_num
-  · sorry  -- Detailed complexity analysis
+  · intro formula
+    -- The computation time is bounded by:
+    -- 1. Signal propagation across the 3D cube: O(n^{1/3})
+    -- 2. Tree depth for combining clauses: O(log n)
+    -- Total: O(n^{1/3} log n)
+
+    -- For now, we use a concrete bound
+    have h_bound : ca_computation_time (encode_sat formula) ≤
+                   100 * formula.num_vars := by
+      -- This would follow from the CA implementation
+      sorry
+
+    -- Show that 100n ≤ n^{1/3} * log n for large enough n
+    -- Actually, this is false for small n, so we need to be careful
+    -- Let's just state the asymptotic bound
+    sorry
 
 /-- But linear recognition time due to encoding -/
 theorem ca_recognition_linear :
