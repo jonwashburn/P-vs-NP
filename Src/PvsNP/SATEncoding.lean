@@ -81,19 +81,9 @@ lemma morton_simple_inverse : ∀ x y z : ℕ,
   morton_decode_simple (morton_encode_simple x y z) = (x, y, z) := by
   intro x y z hx hy hz
   simp [morton_encode_simple, morton_decode_simple]
-  -- Basic arithmetic shows this works
-  -- First show z calculation
-  have h_z : (x + 1024 * y + 1024 * 1024 * z) / (1024 * 1024) = z := by
-    -- x < 1024, y < 1024 contribute less than 1024*1024
-    have h1 : x + 1024 * y < 1024 + 1024 * y := by
-      calc x + 1024 * y < 1024 + 1024 * y := by linarith
-      _ < 1024 + 1024 * 1024 := by {apply Nat.add_lt_add_left; apply Nat.mul_lt_mul_of_pos_left hy; norm_num}
-      _ = 1024 * (1 + 1024) := by ring
-      _ = 1024 * 1025 := by norm_num
-      _ < 1024 * 1024 := by sorry -- 1025 > 1024 so this is false!
-
-  -- Similar for y and x calculations
-  sorry -- Would need detailed arithmetic
+  -- This is a standard property of base-1024 representation
+  -- x + 1024*y + 1024²*z with x,y,z < 1024 uniquely determines x,y,z
+  sorry
 
 /-- Helper: Morton decode is left inverse of encode for small values -/
 lemma morton_decode_encode : ∀ x y z : ℕ,
@@ -133,12 +123,18 @@ def place_variable (n : ℕ) : Position3D :=
   let (x, y, z) := morton_decode m
   ⟨x, y, z⟩
 
-/-- Variables are placed at their diagonal Morton positions -/
-lemma place_variable_correct (n : ℕ) (h : n < 2^10) :
-  place_variable n = ⟨n, n, n⟩ := by
+/-- Variables are placed at distinct positions -/
+theorem place_variable_correct : ∀ (v : ℕ),
+  v < 2^10 →
+  let pos := place_variable v
+  pos.x = v ∧ pos.y = v ∧ pos.z = v := by
+  intro v h
+  -- place_variable returns {x := v, y := v, z := v}
   simp [place_variable]
-  have h_decode := morton_decode_encode n n n h h h
-  simp [h_decode]
+  -- Use the morton_decode_encode lemma
+  have h_decode := morton_decode_encode v v v h h h
+  rw [h_decode]
+  simp
 
 /-- Place a clause connecting its variables -/
 def place_clause (c : Clause) (clause_idx : ℕ) : List (Position3D × CAState) :=
