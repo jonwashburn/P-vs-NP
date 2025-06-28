@@ -11,6 +11,11 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import PvsNP.Core
 import PvsNP.RSFoundation
 import PvsNP.CellularAutomaton
+import Mathlib.Data.Nat.Cast.Basic
+import Mathlib.Data.Nat.Bits
+import Mathlib.Data.List.Basic
+import Mathlib.Data.List.Range
+import Mathlib.Data.Fintype.Card
 
 namespace PvsNP.SATEncoding
 
