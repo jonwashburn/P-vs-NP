@@ -45,9 +45,11 @@ LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__encode_interleave(lean_obje
 lean_object* lean_nat_abs(lean_object*);
 LEAN_EXPORT lean_object* l_List_sum___at_PvsNP_SATEncoding_place__clause___spec__2(lean_object*);
 LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_encode__sat___lambda__2___boxed(lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter___rarg___boxed(lean_object*, lean_object*, lean_object*);
 uint8_t lean_nat_dec_eq(lean_object*, lean_object*);
 LEAN_EXPORT uint8_t l_PvsNP_SATEncoding_encode__sat___lambda__2(lean_object*, lean_object*);
 LEAN_EXPORT uint8_t l_PvsNP_SATEncoding_encode__sat___lambda__1(lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter(lean_object*);
 lean_object* lean_nat_shiftl(lean_object*, lean_object*);
 lean_object* lean_nat_sub(lean_object*, lean_object*);
 lean_object* l_List_foldl___at_Array_appendList___spec__1___rarg(lean_object*, lean_object*);
@@ -61,6 +63,7 @@ lean_object* lean_int_ediv(lean_object*, lean_object*);
 lean_object* l_List_enumFrom___rarg(lean_object*, lean_object*);
 lean_object* lean_nat_lor(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_List_mapTR_loop___at_PvsNP_SATEncoding_place__clause___spec__1(lean_object*, lean_object*);
+LEAN_EXPORT lean_object* l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter___rarg(lean_object*, lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_place__clause___boxed(lean_object*, lean_object*);
 LEAN_EXPORT lean_object* l_PvsNP_SATEncoding_morton__encode_interleave(lean_object* x_1, lean_object* x_2, lean_object* x_3, lean_object* x_4, lean_object* x_5) {
 _start:
@@ -796,6 +799,46 @@ _start:
 uint8_t x_3; lean_object* x_4; 
 x_3 = l_PvsNP_SATEncoding_encode__sat(x_1, x_2);
 x_4 = lean_box(x_3);
+return x_4;
+}
+}
+LEAN_EXPORT lean_object* l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter___rarg(lean_object* x_1, lean_object* x_2, lean_object* x_3) {
+_start:
+{
+lean_object* x_4; uint8_t x_5; 
+x_4 = lean_unsigned_to_nat(0u);
+x_5 = lean_nat_dec_eq(x_1, x_4);
+if (x_5 == 0)
+{
+lean_object* x_6; lean_object* x_7; lean_object* x_8; 
+x_6 = lean_unsigned_to_nat(1u);
+x_7 = lean_nat_sub(x_1, x_6);
+x_8 = lean_apply_1(x_3, x_7);
+return x_8;
+}
+else
+{
+lean_dec(x_3);
+lean_inc(x_2);
+return x_2;
+}
+}
+}
+LEAN_EXPORT lean_object* l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter(lean_object* x_1) {
+_start:
+{
+lean_object* x_2; 
+x_2 = lean_alloc_closure((void*)(l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter___rarg___boxed), 3, 0);
+return x_2;
+}
+}
+LEAN_EXPORT lean_object* l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter___rarg___boxed(lean_object* x_1, lean_object* x_2, lean_object* x_3) {
+_start:
+{
+lean_object* x_4; 
+x_4 = l___private_PvsNP_SATEncoding_0__PvsNP_CellularAutomaton_ca__run_match__1_splitter___rarg(x_1, x_2, x_3);
+lean_dec(x_2);
+lean_dec(x_1);
 return x_4;
 }
 }

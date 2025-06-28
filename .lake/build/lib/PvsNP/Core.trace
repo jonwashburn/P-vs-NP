@@ -3,9 +3,6 @@
    ".> LEAN_PATH=././.lake/packages/batteries/.lake/build/lib:././.lake/packages/Qq/.lake/build/lib:././.lake/packages/aesop/.lake/build/lib:././.lake/packages/proofwidgets/.lake/build/lib:././.lake/packages/Cli/.lake/build/lib:././.lake/packages/importGraph/.lake/build/lib:././.lake/packages/LeanSearchClient/.lake/build/lib:././.lake/packages/mathlib/.lake/build/lib:././.lake/build/lib DYLD_LIBRARY_PATH= /Users/jonathanwashburn/.elan/toolchains/leanprover--lean4---v4.12.0/bin/lean -DautoImplicit=false ./././Src/PvsNP/Core.lean -R ./././Src -o ././.lake/build/lib/PvsNP/Core.olean -i ././.lake/build/lib/PvsNP/Core.ilean -c ././.lake/build/ir/PvsNP/Core.c --json",
    "level": "trace"},
   {"message":
-   "./././Src/PvsNP/Core.lean:40:42: unused variable `n`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
-   "level": "warning"},
-  {"message":
-   "./././Src/PvsNP/Core.lean:45:42: unused variable `n`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/Core.lean:84:8: unused variable `n`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"}],
- "depHash": "15348762478769226590"}
+ "depHash": "4527533467476176855"}

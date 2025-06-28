@@ -77,22 +77,35 @@ return x_4;
 else
 {
 lean_object* x_5; uint8_t x_6; 
-x_5 = lean_apply_1(x_1, x_3);
-x_6 = lean_unbox(x_5);
-lean_dec(x_5);
+x_5 = lean_unsigned_to_nat(0u);
+x_6 = lean_nat_dec_eq(x_3, x_5);
 if (x_6 == 0)
 {
-uint8_t x_7; lean_object* x_8; 
-x_7 = 1;
-x_8 = lean_box(x_7);
-return x_8;
+lean_object* x_7; 
+x_7 = lean_apply_1(x_1, x_3);
+return x_7;
 }
 else
 {
-uint8_t x_9; lean_object* x_10; 
-x_9 = 0;
-x_10 = lean_box(x_9);
-return x_10;
+lean_object* x_8; uint8_t x_9; 
+lean_dec(x_3);
+x_8 = lean_apply_1(x_1, x_5);
+x_9 = lean_unbox(x_8);
+lean_dec(x_8);
+if (x_9 == 0)
+{
+uint8_t x_10; lean_object* x_11; 
+x_10 = 1;
+x_11 = lean_box(x_10);
+return x_11;
+}
+else
+{
+uint8_t x_12; lean_object* x_13; 
+x_12 = 0;
+x_13 = lean_box(x_12);
+return x_13;
+}
 }
 }
 }

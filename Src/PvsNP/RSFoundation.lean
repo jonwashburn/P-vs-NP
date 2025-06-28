@@ -182,6 +182,9 @@ theorem RS_correction_unbounded :
   _ = M := by
       -- (φ / E_coh) * (M * E_coh / φ) = M
       -- This is a straightforward algebraic identity
-      sorry
+      have h_phi_ne : φ ≠ 0 := by linarith [φ_gt_one]
+      have h_ecoh_ne : E_coh ≠ 0 := by linarith [E_coh_pos]
+      field_simp [h_phi_ne, h_ecoh_ne]
+      ring
 
 end PvsNP.RSFoundation

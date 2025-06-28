@@ -7,8 +7,5 @@
    "level": "warning"},
   {"message":
    "./././Src/PvsNP/TuringMachine.lean:84:27: unused variable `input`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
-   "level": "warning"},
-  {"message":
-   "./././Src/PvsNP/TuringMachine.lean:109:8: declaration uses 'sorry'",
    "level": "warning"}],
- "depHash": "9747413505679308855"}
+ "depHash": "7755888398531550702"}

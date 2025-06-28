@@ -9,6 +9,9 @@
    "./././Src/PvsNP/RSFoundation.lean:88:5: unused variable `encoding`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RSFoundation.lean:116:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/RSFoundation.lean:139:7: unused variable `h_n_gt`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/RSFoundation.lean:147:7: unused variable `h_n_pos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"}],
- "depHash": "17557100159342987509"}
+ "depHash": "5687199690714351289"}

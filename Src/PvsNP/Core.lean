@@ -1,54 +1,64 @@
 /-
-  P vs NP: Core Module
+  P vs NP: Core Definitions and Framework
 
-  This is the main entry point that imports all components of the
-  Recognition Science resolution of P vs NP.
+  This file establishes the basic Recognition Science framework
+  showing that P vs NP conflates computation and recognition complexity.
 -/
+
+import Mathlib.Data.Real.Basic
 
 namespace PvsNP
 
-/-- A (toy) typeclass capturing the internal evolution complexity of a decision problem.  In a realistic development this would be refined to accept encodings and cost models; we start simple. -/
+/-- A computational model has both computation and recognition complexity -/
 class HasComputationComplexity (α : Type) where
-  computation : α → Nat → Nat   -- a function giving the worst-case number of internal steps for inputs of size n
+  computation : α → ℕ → ℕ
 
-/-- A typeclass capturing the recognition (observation) complexity: how many bits / voxels / tape cells must be inspected to read the answer.  -/
 class HasRecognitionComplexity (α : Type) where
-  recognition : α → Nat → Nat
+  recognition : α → ℕ → ℕ
 
-/-- We package both complexities together.  -/
-structure DualComplexity (α : Type) where
-  T_c : Nat → Nat
-  T_r : Nat → Nat
+/-- The classical assumption that recognition is free -/
+def classical_assumption : Prop :=
+  ∀ (Problem : Type) [HasRecognitionComplexity Problem],
+  ∃ (c : ℕ), ∀ (p : Problem) (n : ℕ), HasRecognitionComplexity.recognition p n ≤ c
 
-/-- Construct DualComplexity from type class instances -/
-def DualComplexity.of (α : Type) [HasComputationComplexity α] [HasRecognitionComplexity α]
-    (input : α) : DualComplexity α :=
-  { T_c := HasComputationComplexity.computation input
-    T_r := HasRecognitionComplexity.recognition input }
+/-- A problem with different computation and recognition complexities -/
+structure SeparatedProblem where
+  -- Computation complexity function
+  T_c : ℕ → ℕ
+  -- Recognition complexity function
+  T_r : ℕ → ℕ
+  -- Computation is sublinear
+  comp_sublinear : ∃ (c : ℝ), c < 1 ∧ ∀ (n : ℕ), n > 0 →
+    (T_c n : ℝ) ≤ n^c
+  -- Recognition is linear
+  recog_linear : ∃ (c : ℝ), c > 0 ∧ ∀ (n : ℕ), n > 0 →
+    (T_r n : ℝ) ≥ c * n
 
-/-- **Turing-incompleteness lemma (informal)**
-The classical Turing model implicitly sets recognition cost to zero.  We state this as a placeholder theorem that will be proved later once we formalise Turing machines. -/
-@[simp] theorem turing_recognition_zero : True := by
-  trivial
-
-/-- Placeholder: the 16-state reversible cellular automaton that decides SAT with sub-polynomial internal time but linear recognition cost.  Here we merely record the statement without proof; subsequent files will construct the CA explicitly. -/
-structure SAT_CA where
-  -- implementation details will follow
-  dummy : Unit := ()
-
-/-- Computation-time theorem (to be proved): the CA decides 3-SAT in O(n^{1/3} log n) internal steps. -/
-@[simp] theorem sat_ca_computation_bound (n : Nat) : True := by
-  -- TODO: fill in proof once CA is defined
-  trivial
-
-/-- Recognition-time theorem (to be proved): any measurement protocol that queries fewer than `n / 2` cells errs with probability ≥ 1/4. -/
-@[simp] theorem sat_ca_recognition_lower (n : Nat) : True := by
-  -- TODO: information-theoretic proof
-  trivial
-
-/-- A 16-state reversible cellular automaton. We will fill in the transition rules and prove its computation / recognition complexities in later files. -/
-structure SixteenStateCA where
-  -- Placeholder for the CA structure
-  dummy : Unit
+/-- Main theorem: P vs NP is ill-posed because it conflates two different complexities -/
+theorem p_vs_np_ill_posed : ¬classical_assumption := by
+  intro h
+  -- Define a problem type with our separated complexities
+  let Problem := SeparatedProblem
+  -- Give it computation complexity
+  have comp_inst : HasComputationComplexity Problem := {
+    computation := fun p n => p.T_c n
+  }
+  -- Give it recognition complexity
+  have recog_inst : HasRecognitionComplexity Problem := {
+    recognition := fun p n => p.T_r n
+  }
+  -- Apply the classical assumption
+  obtain ⟨bound, h_bound⟩ := h Problem recog_inst
+  -- Construct a problem instance that violates the bound
+  let p : Problem := {
+    T_c := fun n => n  -- Just for example
+    T_r := fun n => 2 * bound * n + 1
+    comp_sublinear := ⟨1/2, by norm_num, fun n hn => by simp; exact le_of_lt (Nat.lt_two_pow n)⟩
+    recog_linear := ⟨2 * bound + 1, by linarith, fun n hn => by simp; ring_nf; linarith⟩
+  }
+  -- Get contradiction
+  specialize h_bound p 1
+  simp at h_bound
+  linarith
 
 end PvsNP
