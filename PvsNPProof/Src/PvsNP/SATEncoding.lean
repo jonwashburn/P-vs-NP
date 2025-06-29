@@ -137,7 +137,7 @@ def place_variable (n : ℕ) : Position3D :=
   let (x, y, z) := morton_decode m
   ⟨x, y, z⟩
 
-/-- Variables are placed at distinct positions -/
+/-- Variable placement is correct -/
 theorem place_variable_correct : ∀ (v : ℕ),
   v < 2^10 →
   let pos := place_variable v
@@ -320,7 +320,7 @@ theorem mask_count_ones :
     simp [mask_simple]
   rw [this]
   -- There are exactly 500 even numbers from 0 to 999
-  -- We'll use the fact that even numbers are 0, 2, 4, ..., 998
-  sorry  -- This requires a counting argument about even numbers
+  -- This follows from the fact that every other number is even
+  sorry
 
 end PvsNP.SATEncoding

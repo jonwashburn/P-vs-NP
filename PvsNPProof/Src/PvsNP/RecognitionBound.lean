@@ -74,7 +74,28 @@ theorem balanced_parity_property (n : ℕ) (code : BalancedParityCode n) :
   -- The balanced code ensures exactly half have odd parity
   -- This follows from the fact that changing any single bit flips the parity
   -- and we can pair up all configurations
-  sorry  -- This requires a bijection argument
+  -- We need n > 0 from code.n_pos
+  have h_pos := code.n_pos
+  -- Define the bit-flipping function at position 0
+  -- Since n > 0, we know Fin n is inhabited
+  have h_inhabited : Inhabited (Fin n) := ⟨⟨0, h_pos⟩⟩
+  let flip : (Fin n → Bool) → (Fin n → Bool) := fun v i =>
+    if i = ⟨0, h_pos⟩ then !v i else v i
+  -- This is an involution (self-inverse)
+  have h_invol : Function.Involutive flip := by
+    intro v
+    ext i
+    simp [flip]
+    by_cases h : i = ⟨0, h_pos⟩
+    · simp [h]
+    · simp [h]
+  -- Flipping changes parity
+  have h_flip_parity : ∀ v, encoded_parity n code (flip v) ≠ encoded_parity n code v := by
+    intro v
+    -- When we flip one bit, the parity changes
+    sorry -- This requires showing that mask ⟨0, h_pos⟩ = true
+  -- Use the involution to pair up elements
+  sorry -- Complete the bijection argument
 
 /-- Information-theoretic lower bound -/
 theorem information_lower_bound (n : ℕ) (h_pos : n > 0) (h_even : Even n) :
