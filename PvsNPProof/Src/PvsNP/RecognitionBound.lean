@@ -20,6 +20,12 @@ import Mathlib.Logic.Function.Basic
 import Mathlib.Logic.Equiv.Fintype
 import Mathlib.Logic.Function.Iterate
 import Mathlib.Algebra.BigOperators.Group.Finset
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Finset.Powerset
+import Mathlib.Data.Bool.Count
+import Mathlib.Data.List.Count
+import Mathlib.Data.Finset.Fold
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
 
 namespace PvsNP.RecognitionBound
 
@@ -56,12 +62,16 @@ def encode_bit (n : ℕ) (code : BalancedParityCode n) (b : Bool) : Fin n → Bo
 /-- Count of true bits in mask equals n/2 -/
 theorem mask_count_ones (n : ℕ) (code : BalancedParityCode n) :
   (Finset.filter (fun i => code.mask i = true) Finset.univ).card = n / 2 := by
-  -- The filter counts true values
-  have : (Finset.filter (fun i => code.mask i = true) Finset.univ) =
-         (Finset.filter (fun i => code.mask i) Finset.univ) := by
+  -- The filter for (mask i = true) is the same as filter for (mask i)
+  have h : Finset.filter (fun i => code.mask i = true) Finset.univ =
+           Finset.filter (fun i => code.mask i) Finset.univ := by
     ext i
     simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-  rw [this]
+    -- For Bool values, b = true ↔ b
+    cases code.mask i with
+    | false => simp
+    | true => simp
+  rw [h]
   exact code.balanced
 
 /-- Correctness of encoded parity -/
@@ -82,7 +92,11 @@ theorem balanced_parity_property (n : ℕ) (code : BalancedParityCode n) :
   -- The balanced code ensures exactly half have odd parity
   -- This is a fundamental property of balanced codes but requires
   -- detailed combinatorial analysis
-  sorry
+  have h_total : Finset.card (Finset.univ : Finset (Fin n → Bool)) = 2^n := by
+    simp [Fintype.card_fun, Fintype.card_fin, Fintype.card_bool]
+  -- For balanced codes, exactly half have odd parity
+  -- This follows from the fact that changing any bit flips the parity
+  sorry -- Requires bijection argument
 
 /-- Information-theoretic lower bound -/
 theorem information_lower_bound (n : ℕ) (h_pos : n > 0) (h_even : Even n) :

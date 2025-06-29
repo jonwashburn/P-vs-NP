@@ -91,8 +91,22 @@ def morton_decode_simple (n : ℕ) : (ℕ × ℕ × ℕ) :=
 theorem morton_simple_inverse (x y z : ℕ) (hx : x < 10) (hy : y < 10) (hz : z < 10) :
   morton_decode_simple (morton_encode_simple x y z) = (x, y, z) := by
   -- The decode operation extracts digits correctly from base-1024 representation
-  -- This requires detailed arithmetic about division and modulo operations
-  sorry
+  simp [morton_encode_simple, morton_decode_simple]
+  -- Need to show that extracting from x + 1024*y + 1024²*z gives (x,y,z)
+  have h_bound : x + 1024 * y < 1024 * 1024 := by
+    have : x + 1024 * y < 10 + 1024 * 10 := by
+      apply Nat.add_lt_add
+      exact hx
+      apply Nat.mul_lt_mul_of_pos_left hy
+      norm_num
+    calc x + 1024 * y < 10 + 1024 * 10 := this
+    _ = 10 + 10240 := by norm_num
+    _ = 10250 := by norm_num
+    _ < 1048576 := by norm_num
+    _ = 1024 * 1024 := by norm_num
+
+  -- Now prove the three components
+  sorry -- Complex modular arithmetic
 
 /-- Morton encoding is invertible -/
 theorem morton_decode_encode (x y z : Fin 10) :
@@ -310,8 +324,6 @@ theorem mask_count_ones :
   rw [this]
   -- The even numbers from 0 to 999 are exactly {0, 2, 4, ..., 998}
   -- There are exactly 500 such numbers
-  -- This is a fundamental counting result that requires
-  -- detailed bijection with Fin 500 or induction
-  sorry
+  sorry -- Standard counting: half of 1000 numbers are even
 
 end PvsNP.SATEncoding
