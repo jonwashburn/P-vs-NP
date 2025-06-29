@@ -39,53 +39,37 @@ structure SeparatedProblem where
 theorem p_vs_np_ill_posed : ¬classical_assumption := by
   intro h
   -- The classical assumption says recognition complexity is bounded by a constant
-  -- We'll show this leads to a contradiction by constructing a problem
-  -- where recognition complexity grows linearly
+  -- We'll show this leads to a contradiction
 
-  -- Define a problem type with our separated complexities
+  -- Define a problem type with separated complexities
   let Problem := SeparatedProblem
 
-  -- Give it complexity instances
-  have comp_inst : HasComputationComplexity Problem := {
-    computation := fun p n => p.T_c n
-  }
-  have recog_inst : HasRecognitionComplexity Problem := {
+  -- Give it complexity instances where recognition = T_r
+  let recog_inst : HasRecognitionComplexity Problem := {
     recognition := fun p n => p.T_r n
   }
 
-  -- Apply the classical assumption to get a bound
+  -- Apply the classical assumption
   have h_spec := @h Problem recog_inst
   obtain ⟨bound, h_bound⟩ := h_spec
 
-  -- Construct a counterexample where T_r grows unboundedly
-  -- For any bound B, we construct a problem with T_r(n) = B + n
+  -- Construct a counterexample
   let p : Problem := {
-    T_c := fun n => 1  -- Constant computation
-    T_r := fun n => bound + n + 1  -- Linear recognition
-    comp_sublinear := ⟨0, by norm_num, fun n hn => by
-      -- T_c(n) = 1 ≤ n^0 = 1 for all n > 0
-      simp only [Nat.cast_one]
-      have : (n : ℝ)^(0 : ℝ) = 1 := by simp
-      rw [this]⟩
-    recog_linear := ⟨1, by norm_num, fun n hn => by
-      -- T_r(n) = bound + n + 1 ≥ 1 * n
-      simp only [Nat.cast_add, Nat.cast_one]
-      ring_nf
-      linarith⟩
+    T_c := fun n => 1
+    T_r := fun n => bound + n + 1
+    comp_sublinear := ⟨0, by norm_num, fun n hn => by simp⟩
+    recog_linear := ⟨1, by norm_num, fun n hn => by simp; linarith⟩
   }
 
   -- Get contradiction at n = 1
   specialize h_bound p 1
-  -- h_bound says: recognition p 1 ≤ bound
-  -- But recognition p 1 = T_r 1 = bound + 1 + 1 > bound
-  -- By definition of recog_inst, recognition = fun p n => p.T_r n
-  -- So @HasRecognitionComplexity.recognition _ recog_inst p 1 = p.T_r 1
-  have h_eq : @HasRecognitionComplexity.recognition _ recog_inst p 1 = p.T_r 1 := by
-    -- This is true by definition of recog_inst
-    sorry  -- Instance reduction issue
-  have h_val : p.T_r 1 = bound + 1 + 1 := rfl
-  rw [h_eq, h_val] at h_bound
-  -- h_bound : bound + 1 + 1 ≤ bound
-  linarith
+  -- h_bound : recognition p 1 ≤ bound
+  -- But recognition p 1 = p.T_r 1 = bound + 2 > bound
+  have : p.T_r 1 = bound + 2 := rfl
+  -- Since our instance defines recognition p n = p.T_r n,
+  -- we have recognition p 1 = bound + 2
+  -- This contradicts h_bound which says it's ≤ bound
+  suffices bound + 2 ≤ bound by linarith
+  exact h_bound
 
 end PvsNP

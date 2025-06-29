@@ -15,6 +15,11 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Logic.Equiv.Basic
 import Mathlib.Combinatorics.Pigeonhole
 import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Bool.Basic
+import Mathlib.Logic.Function.Basic
+import Mathlib.Logic.Equiv.Fintype
+import Mathlib.Logic.Function.Iterate
+import Mathlib.Algebra.BigOperators.Group.Finset
 
 namespace PvsNP.RecognitionBound
 
@@ -59,12 +64,15 @@ theorem mask_count_ones (n : ℕ) (code : BalancedParityCode n) :
   rw [this]
   exact code.balanced
 
-/-- Encoded parity matches actual parity of masked values -/
-theorem encoded_parity_correct (n : ℕ) (code : BalancedParityCode n)
-  (values : Fin n → Bool) :
-  encoded_parity n code values = encoded_parity n code values := by
-  -- Trivially true
-  rfl
+/-- Correctness of encoded parity -/
+theorem encoded_parity_correct (n : ℕ) (code : BalancedParityCode n) (b : Bool) :
+  encoded_parity n code (fun i => i.val % 2 = 1 && b) = b := by
+  -- The parity calculation depends on which positions have both:
+  -- 1. mask = true
+  -- 2. value = true (which is i.val % 2 = 1 && b)
+  -- This requires detailed analysis of the interaction between
+  -- the mask pattern and the odd/even positions
+  sorry
 
 /-- Balanced property: exactly half of all possible values have parity 1 -/
 theorem balanced_parity_property (n : ℕ) (code : BalancedParityCode n) :
@@ -72,30 +80,9 @@ theorem balanced_parity_property (n : ℕ) (code : BalancedParityCode n) :
     (Finset.univ : Finset (Fin n → Bool))).card =
   2^n / 2 := by
   -- The balanced code ensures exactly half have odd parity
-  -- This follows from the fact that changing any single bit flips the parity
-  -- and we can pair up all configurations
-  -- We need n > 0 from code.n_pos
-  have h_pos := code.n_pos
-  -- Define the bit-flipping function at position 0
-  -- Since n > 0, we know Fin n is inhabited
-  have h_inhabited : Inhabited (Fin n) := ⟨⟨0, h_pos⟩⟩
-  let flip : (Fin n → Bool) → (Fin n → Bool) := fun v i =>
-    if i = ⟨0, h_pos⟩ then !v i else v i
-  -- This is an involution (self-inverse)
-  have h_invol : Function.Involutive flip := by
-    intro v
-    ext i
-    simp [flip]
-    by_cases h : i = ⟨0, h_pos⟩
-    · simp [h]
-    · simp [h]
-  -- Flipping changes parity
-  have h_flip_parity : ∀ v, encoded_parity n code (flip v) ≠ encoded_parity n code v := by
-    intro v
-    -- When we flip one bit, the parity changes
-    sorry -- This requires showing that mask ⟨0, h_pos⟩ = true
-  -- Use the involution to pair up elements
-  sorry -- Complete the bijection argument
+  -- This is a fundamental property of balanced codes but requires
+  -- detailed combinatorial analysis
+  sorry
 
 /-- Information-theoretic lower bound -/
 theorem information_lower_bound (n : ℕ) (h_pos : n > 0) (h_even : Even n) :
@@ -105,9 +92,9 @@ theorem information_lower_bound (n : ℕ) (h_pos : n > 0) (h_even : Even n) :
   intro alg
   -- By pigeonhole principle, algorithm must examine at least n/2 cells
   -- to distinguish between the two possible encodings
-  use false  -- Choose one of the two possible values
-  -- The algorithm must examine enough cells to determine the parity
-  sorry  -- This requires information-theoretic argument about distinguishability
+  -- This is a fundamental information-theoretic argument
+  use false
+  sorry
 
 /-- Recognition complexity of a problem -/
 def recognition_complexity (problem : Type) (n : ℕ) : ℕ :=
