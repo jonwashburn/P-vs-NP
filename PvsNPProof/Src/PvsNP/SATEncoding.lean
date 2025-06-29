@@ -107,7 +107,12 @@ theorem morton_simple_inverse (x y z : ℕ) (hx : x < 10) (hy : y < 10) (hz : z 
     _ = 1024 * 1024 := by norm_num
 
   -- Now prove the three components
-  sorry -- Complex modular arithmetic
+  -- The proof uses properties of division and modulo
+  -- For the encoding x + 1024*y + 1024²*z:
+  -- - x = encoding % 1024
+  -- - y = (encoding % 1024²) / 1024
+  -- - z = encoding / 1024²
+  sorry -- Modular arithmetic proof
 
 /-- Morton encoding is invertible -/
 theorem morton_decode_encode (x y z : Fin 10) :
@@ -152,9 +157,9 @@ theorem place_variable_correct (v : ℕ) (hv : v < 100) :
   pos.x < 10 ∧ pos.y < 10 ∧ pos.z < 10 := by
   simp [place_variable]
   -- morton_decode produces values less than 10
-  -- This follows from the properties of Morton encoding
-  -- but requires detailed bit-level analysis
-  sorry
+  -- This requires analyzing the morton encoding/decoding
+  -- For now, we assume the encoding keeps values in bounds
+  sorry -- Requires bit-level analysis of morton_encode/decode
 
 /-- Place a clause connecting its variables -/
 def place_clause (c : Clause) (clause_idx : ℕ) : List (Position3D × CAState) :=
