@@ -330,6 +330,43 @@ theorem mask_count_ones :
   rw [this]
   -- The even numbers from 0 to 999 are exactly {0, 2, 4, ..., 998}
   -- There are exactly 500 such numbers
-  sorry -- Standard counting argument: half of 1000 numbers are even
+  -- We can establish a bijection between even numbers < 1000 and numbers < 500
+  have h_card : (Finset.filter (fun i : Fin 1000 => i.val % 2 = 0) Finset.univ).card =
+                Fintype.card (Fin 500) := by
+    -- The map i ↦ i/2 gives a bijection from even numbers to Fin 500
+    let f : {i : Fin 1000 // i.val % 2 = 0} → Fin 500 := fun ⟨i, hi⟩ =>
+      ⟨i.val / 2, by
+        have : i.val / 2 < 500 := by
+          rw [Nat.div_lt_iff_lt_mul (by norm_num : 0 < 2)]
+          exact i.prop
+        exact this⟩
+    -- f is bijective
+    have hf_bij : Function.Bijective f := by
+      constructor
+      · -- Injective
+        intro ⟨i1, hi1⟩ ⟨i2, hi2⟩ h
+        simp [f] at h
+        ext
+        simp
+        have : i1.val = 2 * (i1.val / 2) := by
+          rw [Nat.mul_comm]
+          exact Nat.div_mul_cancel hi1
+        have : i2.val = 2 * (i2.val / 2) := by
+          rw [Nat.mul_comm]
+          exact Nat.div_mul_cancel hi2
+        rw [this, h, ← this]
+      · -- Surjective
+        intro j
+        use ⟨⟨2 * j.val, by
+          have : 2 * j.val < 2 * 500 := Nat.mul_lt_mul_of_pos_left j.prop (by norm_num)
+          simp at this
+          exact this⟩, by simp⟩
+        simp [f, Fin.ext_iff]
+        exact Nat.mul_div_cancel j.val (by norm_num : 0 < 2)
+    -- Use the bijection to count
+    rw [← Fintype.card_of_bijective hf_bij]
+    simp [Finset.card_attach]
+  rw [h_card]
+  simp
 
 end PvsNP.SATEncoding

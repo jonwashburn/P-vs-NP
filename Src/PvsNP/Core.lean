@@ -82,7 +82,7 @@ theorem p_vs_np_ill_posed : ¬classical_assumption := by
   -- So @HasRecognitionComplexity.recognition _ recog_inst p 1 = p.T_r 1
   have h_eq : @HasRecognitionComplexity.recognition _ recog_inst p 1 = p.T_r 1 := by
     -- This is true by definition of recog_inst
-    sorry  -- Instance reduction issue
+    rfl
   have h_val : p.T_r 1 = bound + 1 + 1 := rfl
   rw [h_eq, h_val] at h_bound
   -- h_bound : bound + 1 + 1 ≤ bound
