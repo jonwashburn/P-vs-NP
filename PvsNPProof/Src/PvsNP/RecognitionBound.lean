@@ -79,7 +79,21 @@ theorem encoded_parity_correct (n : ℕ) (code : BalancedParityCode n) (b : Bool
   -- 2. value = true (which is i.val % 2 = 1 && b)
   -- This requires detailed analysis of the interaction between
   -- the mask pattern and the odd/even positions
-  sorry
+  simp [encoded_parity]
+  -- Count positions where mask i = true AND i is odd AND b = true
+  -- If b = false, all values are false, so count is 0, parity is 0 (even)
+  -- If b = true, count equals number of odd positions with mask = true
+  cases b with
+  | false =>
+    -- All values are false, so filter is empty
+    simp [Bool.and_false]
+    -- Empty filter has card 0, which is even
+    simp
+  | true =>
+    -- Values are true at odd positions
+    simp [Bool.and_true]
+    -- Need to show that count of odd positions with mask true is odd
+    sorry -- Requires knowing the specific mask pattern
 
 /-- Balanced property: exactly half of all possible values have parity 1 -/
 theorem balanced_parity_property (n : ℕ) (code : BalancedParityCode n) :

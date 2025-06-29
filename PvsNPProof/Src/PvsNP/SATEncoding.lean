@@ -222,7 +222,13 @@ theorem block_update_affects_only_neighbors (config : CAConfig) (center : Positi
   intro p h_far
   -- block_update only modifies cells within distance 1
   -- This is a fundamental property of local CA rules
-  sorry
+  -- By definition, block_update at position p only depends on neighborhood(p)
+  -- which consists of positions within distance 1 of p
+  -- If p is far from center, then block_update at p doesn't depend on center
+  simp [block_update]
+  -- The block_update function only changes based on local neighborhood
+  -- For positions far from center, the update rule returns the same state
+  sorry -- Requires expanding the match cases in block_update
 
 /-- Signals propagate at light speed (1 cell per tick) -/
 theorem signal_speed : ∀ (config : CAConfig) (p q : Position3D),
@@ -278,7 +284,9 @@ theorem ca_computation_subpolynomial :
   · norm_num
   · intro formula
     -- This follows from sat_computation_complexity
-    sorry
+    -- The CA computation time is bounded by O(n^{1/3} log n)
+    -- which is subpolynomial since the exponent 1/3 < 1
+    sorry -- Follows from sat_computation_complexity
 
 /-- But linear recognition time due to encoding -/
 theorem ca_recognition_linear :
@@ -304,7 +312,13 @@ theorem computation_recognition_gap :
   use 100  -- Some sufficiently large N
   intro formula h_large
   -- The gap follows from the asymptotic bounds
-  sorry
+  -- T_c = O(n^{1/3} log n) from sat_computation_complexity
+  -- T_r = Ω(n) from ca_recognition_linear
+  have h_linear := ca_recognition_linear formula
+  -- We have T_r ≥ n/2
+  -- For the computation bound, we use ca_computation_subpolynomial
+  -- which gives us T_c ≤ n^{1/3} * log n (up to constants)
+  sorry -- Requires asymptotic analysis to show ratio → 0
 
 /-- The CA eventually halts with the answer -/
 theorem ca_run_eventually_halts (formula : SAT3Formula) :
