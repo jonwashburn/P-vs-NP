@@ -15,6 +15,7 @@ Using a 16-state reversible cellular automaton, we prove:
 - SAT has computation complexity T_c = O(n^{1/3} log n)
 - SAT has recognition complexity T_r = Ω(n)
 
+<<<<<<< HEAD
 This separation explains why P vs NP has been so difficult: the question conflates two fundamentally different resources.
 
 ## Proof Status
@@ -44,6 +45,29 @@ PvsNPProof/
 ```
 
 ## Building
+=======
+This separation suggests:
+- At computation scale: P = NP (both polynomial)
+- At recognition scale: P ≠ NP (linear vs polynomial gap)
+
+## Repository Structure
+
+```
+├── PvsNPProof/           # Lean 4 formalization
+│   ├── Src/PvsNP/       # Core proof modules
+│   │   ├── RSFoundation.lean      # Recognition Science axioms
+│   │   ├── TuringMachine.lean     # TM formalization  
+│   │   ├── CellularAutomaton.lean # 16-state CA
+│   │   ├── SATEncoding.lean       # SAT → CA encoding
+│   │   ├── RecognitionBound.lean  # Information-theoretic bounds
+│   │   └── MainTheorem.lean       # Main separation theorem
+│   └── ProofStatus.md   # Current proof status
+├── P-vs-NP-Complete_Theory_of_Physical_Computation.tex
+└── ProjectPlan.md       # Development roadmap
+```
+
+## Building the Lean Proof
+>>>>>>> origin/main
 
 ```bash
 cd PvsNPProof
@@ -51,6 +75,7 @@ lake update
 lake build
 ```
 
+<<<<<<< HEAD
 ## Key Insights
 
 1. **Turing Incompleteness**: The Turing model assumes zero-cost observation
@@ -77,3 +102,31 @@ MIT License - See [LICENSE](LICENSE) file for details.
 ## Contributing
 
 This is an active research project. Contributions to eliminate the remaining sorries are welcome! 
+=======
+## Current Status
+
+- ✅ All modules build successfully
+- ✅ Core mathematical structure complete
+- 📊 16 sorries remaining (detailed proofs of standard results)
+- 🔬 Formal verification demonstrates the computation/recognition separation
+
+## Paper
+
+The complete theory is detailed in: [P-vs-NP-Complete_Theory_of_Physical_Computation.tex](P-vs-NP-Complete_Theory_of_Physical_Computation.tex)
+
+## Citation
+
+If you use this work, please cite:
+```bibtex
+@article{washburn2024pvsnp,
+  title={A Two-Parameter Theory of Physical Computation: A New Perspective on P vs NP},
+  author={Washburn, Jonathan},
+  journal={arXiv preprint},
+  year={2024}
+}
+```
+
+## License
+
+This work is licensed under MIT License. See LICENSE for details. 
+>>>>>>> origin/main

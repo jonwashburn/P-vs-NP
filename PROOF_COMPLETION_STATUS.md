@@ -35,8 +35,13 @@ The Lean 4 formalization of the Recognition Science P vs NP proof is structurall
 - ✅ recognition_requires_linear_measurements proven
 - ✅ fundamental_gap structure complete
 - 🔶 encoded_parity_correct: Parity counting
+<<<<<<< HEAD
 - 🔶 balanced_parity_property: Information hiding
 - 🔶 information_lower_bound: Information theory bound
+=======
+- �� balanced_parity_property: Information hiding
+- �� information_lower_bound: Information theory bound
+>>>>>>> origin/main
 - 🔶 measurement_lower_bound: Main measurement theorem
 - 🔶 2 sorries in fundamental_gap (computation bound reference)
 
@@ -71,4 +76,8 @@ The proof structure is sound and the key ideas are formalized. The remaining sor
 - Information-theoretic counting arguments  
 - Asymptotic complexity analysis
 
+<<<<<<< HEAD
 The conceptual breakthrough - separating computation and recognition complexity - is fully captured in the formalization. 
+=======
+The conceptual breakthrough - separating computation and recognition complexity - is fully captured in the formalization.
+>>>>>>> origin/main

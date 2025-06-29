@@ -1,0 +1,11 @@
+{"log":
+ [{"message":
+   ".> LEAN_PATH=././.lake/packages/batteries/.lake/build/lib:././.lake/packages/Qq/.lake/build/lib:././.lake/packages/aesop/.lake/build/lib:././.lake/packages/proofwidgets/.lake/build/lib:././.lake/packages/Cli/.lake/build/lib:././.lake/packages/importGraph/.lake/build/lib:././.lake/packages/LeanSearchClient/.lake/build/lib:././.lake/packages/mathlib/.lake/build/lib:././.lake/build/lib DYLD_LIBRARY_PATH= /Users/jonathanwashburn/.elan/toolchains/leanprover--lean4---v4.12.0/bin/lean -DautoImplicit=false ./././Src/PvsNP/TuringMachine.lean -R ./././Src -o ././.lake/build/lib/PvsNP/TuringMachine.olean -i ././.lake/build/lib/PvsNP/TuringMachine.ilean -c ././.lake/build/ir/PvsNP/TuringMachine.c --json",
+   "level": "trace"},
+  {"message":
+   "./././Src/PvsNP/TuringMachine.lean:84:5: unused variable `M`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/TuringMachine.lean:84:27: unused variable `input`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"}],
+ "depHash": "12176622254924176728"}

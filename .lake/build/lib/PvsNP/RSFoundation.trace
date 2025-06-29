@@ -1,0 +1,17 @@
+{"log":
+ [{"message":
+   ".> LEAN_PATH=././.lake/packages/batteries/.lake/build/lib:././.lake/packages/Qq/.lake/build/lib:././.lake/packages/aesop/.lake/build/lib:././.lake/packages/proofwidgets/.lake/build/lib:././.lake/packages/Cli/.lake/build/lib:././.lake/packages/importGraph/.lake/build/lib:././.lake/packages/LeanSearchClient/.lake/build/lib:././.lake/packages/mathlib/.lake/build/lib:././.lake/build/lib DYLD_LIBRARY_PATH= /Users/jonathanwashburn/.elan/toolchains/leanprover--lean4---v4.12.0/bin/lean -DautoImplicit=false ./././Src/PvsNP/RSFoundation.lean -R ./././Src -o ././.lake/build/lib/PvsNP/RSFoundation.olean -i ././.lake/build/lib/PvsNP/RSFoundation.ilean -c ././.lake/build/ir/PvsNP/RSFoundation.c --json",
+   "level": "trace"},
+  {"message":
+   "./././Src/PvsNP/RSFoundation.lean:80:5: unused variable `states`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/RSFoundation.lean:88:5: unused variable `encoding`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/RSFoundation.lean:139:7: unused variable `h_n_gt`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/RSFoundation.lean:147:7: unused variable `h_n_pos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"}],
+ "depHash": "5687199690714351289"}
