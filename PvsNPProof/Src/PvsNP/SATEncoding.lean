@@ -23,6 +23,7 @@ import Mathlib.Algebra.BigOperators.Intervals
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Finset.Card
 import Mathlib.Data.Fin.Basic
+import Mathlib.Tactic.Linarith
 
 namespace PvsNP.SATEncoding
 
@@ -324,6 +325,6 @@ theorem mask_count_ones :
   rw [this]
   -- The even numbers from 0 to 999 are exactly {0, 2, 4, ..., 998}
   -- There are exactly 500 such numbers
-  sorry -- Standard counting: half of 1000 numbers are even
+  sorry -- Standard counting argument: half of 1000 numbers are even
 
 end PvsNP.SATEncoding

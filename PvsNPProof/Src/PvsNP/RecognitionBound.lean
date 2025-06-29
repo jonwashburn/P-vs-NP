@@ -63,16 +63,13 @@ def encode_bit (n : ℕ) (code : BalancedParityCode n) (b : Bool) : Fin n → Bo
 theorem mask_count_ones (n : ℕ) (code : BalancedParityCode n) :
   (Finset.filter (fun i => code.mask i = true) Finset.univ).card = n / 2 := by
   -- The filter for (mask i = true) is the same as filter for (mask i)
-  have h : Finset.filter (fun i => code.mask i = true) Finset.univ =
-           Finset.filter (fun i => code.mask i) Finset.univ := by
-    ext i
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-    -- For Bool values, b = true ↔ b
-    cases code.mask i with
-    | false => simp
-    | true => simp
-  rw [h]
-  exact code.balanced
+  -- because for Bool, (b = true) ↔ b
+  simp only [← code.balanced]
+  congr 1
+  ext i
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  -- For Bool values, (b = true) ↔ b
+  simp only [eq_self_iff_true]
 
 /-- Correctness of encoded parity -/
 theorem encoded_parity_correct (n : ℕ) (code : BalancedParityCode n) (b : Bool) :
