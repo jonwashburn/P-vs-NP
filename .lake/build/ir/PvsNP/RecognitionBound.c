@@ -1,6 +1,6 @@
 // Lean compiler output
 // Module: PvsNP.RecognitionBound
-// Imports: Init PvsNP.Core PvsNP.RSFoundation PvsNP.CellularAutomaton PvsNP.SATEncoding Mathlib.Data.Fintype.Card Mathlib.Analysis.SpecialFunctions.Log.Basic Mathlib.Analysis.SpecialFunctions.Pow.Real
+// Imports: Init PvsNP.Core PvsNP.RSFoundation PvsNP.SATEncoding PvsNP.CellularAutomaton Mathlib.Data.Finset.Card Mathlib.Analysis.SpecialFunctions.Log.Basic Mathlib.Analysis.SpecialFunctions.Pow.Real
 #include <lean/lean.h>
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -157,9 +157,9 @@ return x_4;
 lean_object* initialize_Init(uint8_t builtin, lean_object*);
 lean_object* initialize_PvsNP_Core(uint8_t builtin, lean_object*);
 lean_object* initialize_PvsNP_RSFoundation(uint8_t builtin, lean_object*);
-lean_object* initialize_PvsNP_CellularAutomaton(uint8_t builtin, lean_object*);
 lean_object* initialize_PvsNP_SATEncoding(uint8_t builtin, lean_object*);
-lean_object* initialize_Mathlib_Data_Fintype_Card(uint8_t builtin, lean_object*);
+lean_object* initialize_PvsNP_CellularAutomaton(uint8_t builtin, lean_object*);
+lean_object* initialize_Mathlib_Data_Finset_Card(uint8_t builtin, lean_object*);
 lean_object* initialize_Mathlib_Analysis_SpecialFunctions_Log_Basic(uint8_t builtin, lean_object*);
 lean_object* initialize_Mathlib_Analysis_SpecialFunctions_Pow_Real(uint8_t builtin, lean_object*);
 static bool _G_initialized = false;
@@ -176,13 +176,13 @@ lean_dec_ref(res);
 res = initialize_PvsNP_RSFoundation(builtin, lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
-res = initialize_PvsNP_CellularAutomaton(builtin, lean_io_mk_world());
-if (lean_io_result_is_error(res)) return res;
-lean_dec_ref(res);
 res = initialize_PvsNP_SATEncoding(builtin, lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
-res = initialize_Mathlib_Data_Fintype_Card(builtin, lean_io_mk_world());
+res = initialize_PvsNP_CellularAutomaton(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Mathlib_Data_Finset_Card(builtin, lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
 res = initialize_Mathlib_Analysis_SpecialFunctions_Log_Basic(builtin, lean_io_mk_world());

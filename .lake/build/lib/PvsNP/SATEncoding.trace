@@ -2,35 +2,35 @@
  [{"message":
    ".> LEAN_PATH=././.lake/packages/batteries/.lake/build/lib:././.lake/packages/Qq/.lake/build/lib:././.lake/packages/aesop/.lake/build/lib:././.lake/packages/proofwidgets/.lake/build/lib:././.lake/packages/Cli/.lake/build/lib:././.lake/packages/importGraph/.lake/build/lib:././.lake/packages/LeanSearchClient/.lake/build/lib:././.lake/packages/mathlib/.lake/build/lib:././.lake/build/lib DYLD_LIBRARY_PATH= /Users/jonathanwashburn/.elan/toolchains/leanprover--lean4---v4.12.0/bin/lean -DautoImplicit=false ./././Src/PvsNP/SATEncoding.lean -R ./././Src -o ././.lake/build/lib/PvsNP/SATEncoding.olean -i ././.lake/build/lib/PvsNP/SATEncoding.ilean -c ././.lake/build/ir/PvsNP/SATEncoding.c --json",
    "level": "trace"},
-  {"message": "./././Src/PvsNP/SATEncoding.lean:84:6: declaration uses 'sorry'",
+  {"message": "./././Src/PvsNP/SATEncoding.lean:86:6: declaration uses 'sorry'",
    "level": "warning"},
-  {"message": "./././Src/PvsNP/SATEncoding.lean:94:6: declaration uses 'sorry'",
-   "level": "warning"},
-  {"message":
-   "./././Src/PvsNP/SATEncoding.lean:148:31: unused variable `clause_idx`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+  {"message": "./././Src/PvsNP/SATEncoding.lean:98:6: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:163:37: unused variable `vpos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/SATEncoding.lean:152:31: unused variable `clause_idx`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:183:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:167:37: unused variable `vpos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:201:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:187:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:213:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:205:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:240:6: unused variable `config`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/SATEncoding.lean:217:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:252:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:246:6: unused variable `config`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:276:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:258:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/SATEncoding.lean:293:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/SATEncoding.lean:282:8: declaration uses 'sorry'",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/SATEncoding.lean:299:8: declaration uses 'sorry'",
    "level": "warning"}],
- "depHash": "14613205163387710113"}
+ "depHash": "12439675562594941487"}

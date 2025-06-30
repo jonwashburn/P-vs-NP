@@ -1,6 +1,6 @@
 // Lean compiler output
 // Module: PvsNP.SATEncoding
-// Imports: Init Mathlib.Data.Real.Basic Mathlib.Analysis.SpecialFunctions.Log.Basic Mathlib.Analysis.SpecialFunctions.Pow.Real PvsNP.Core PvsNP.RSFoundation PvsNP.CellularAutomaton Mathlib.Data.Nat.Cast.Basic Mathlib.Data.Nat.Bits Mathlib.Data.List.Basic Mathlib.Data.List.Range Mathlib.Data.Fintype.Card
+// Imports: Init Mathlib.Data.Real.Basic Mathlib.Analysis.SpecialFunctions.Log.Basic Mathlib.Analysis.SpecialFunctions.Pow.Real PvsNP.Core PvsNP.RSFoundation PvsNP.CellularAutomaton Mathlib.Data.Nat.Cast.Basic Mathlib.Data.Nat.Bits Mathlib.Data.List.Basic Mathlib.Data.List.Range Mathlib.Data.Fintype.Card Mathlib.Analysis.SpecialFunctions.Pow.Real Mathlib.Data.Nat.ModEq
 #include <lean/lean.h>
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -918,6 +918,8 @@ lean_object* initialize_Mathlib_Data_Nat_Bits(uint8_t builtin, lean_object*);
 lean_object* initialize_Mathlib_Data_List_Basic(uint8_t builtin, lean_object*);
 lean_object* initialize_Mathlib_Data_List_Range(uint8_t builtin, lean_object*);
 lean_object* initialize_Mathlib_Data_Fintype_Card(uint8_t builtin, lean_object*);
+lean_object* initialize_Mathlib_Analysis_SpecialFunctions_Pow_Real(uint8_t builtin, lean_object*);
+lean_object* initialize_Mathlib_Data_Nat_ModEq(uint8_t builtin, lean_object*);
 static bool _G_initialized = false;
 LEAN_EXPORT lean_object* initialize_PvsNP_SATEncoding(uint8_t builtin, lean_object* w) {
 lean_object * res;
@@ -957,6 +959,12 @@ res = initialize_Mathlib_Data_List_Range(builtin, lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
 res = initialize_Mathlib_Data_Fintype_Card(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Mathlib_Analysis_SpecialFunctions_Pow_Real(builtin, lean_io_mk_world());
+if (lean_io_result_is_error(res)) return res;
+lean_dec_ref(res);
+res = initialize_Mathlib_Data_Nat_ModEq(builtin, lean_io_mk_world());
 if (lean_io_result_is_error(res)) return res;
 lean_dec_ref(res);
 l_List_sum___at_PvsNP_SATEncoding_place__clause___spec__2___closed__1 = _init_l_List_sum___at_PvsNP_SATEncoding_place__clause___spec__2___closed__1();

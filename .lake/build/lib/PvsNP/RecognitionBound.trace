@@ -3,27 +3,27 @@
    ".> LEAN_PATH=././.lake/packages/batteries/.lake/build/lib:././.lake/packages/Qq/.lake/build/lib:././.lake/packages/aesop/.lake/build/lib:././.lake/packages/proofwidgets/.lake/build/lib:././.lake/packages/Cli/.lake/build/lib:././.lake/packages/importGraph/.lake/build/lib:././.lake/packages/LeanSearchClient/.lake/build/lib:././.lake/packages/mathlib/.lake/build/lib:././.lake/build/lib DYLD_LIBRARY_PATH= /Users/jonathanwashburn/.elan/toolchains/leanprover--lean4---v4.12.0/bin/lean -DautoImplicit=false ./././Src/PvsNP/RecognitionBound.lean -R ./././Src -o ././.lake/build/lib/PvsNP/RecognitionBound.olean -i ././.lake/build/lib/PvsNP/RecognitionBound.ilean -c ././.lake/build/ir/PvsNP/RecognitionBound.c --json",
    "level": "trace"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:38:6: declaration uses 'sorry'",
+   "./././Src/PvsNP/RecognitionBound.lean:40:6: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:48:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/RecognitionBound.lean:47:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:75:10: unused variable `h_small`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:57:10: unused variable `h_small`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:89:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/RecognitionBound.lean:71:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:118:8: unused variable `h_pos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:106:8: unused variable `h_pos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:125:5: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:113:5: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:128:16: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:116:16: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:136:6: unused variable `T_c`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:124:6: unused variable `T_c`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"}],
- "depHash": "7738360730374462421"}
+ "depHash": "7505654608189580932"}
