@@ -88,11 +88,13 @@ lemma morton_simple_inverse : ∀ x y z : ℕ,
   morton_decode_simple (morton_encode_simple x y z) = (x, y, z) := by
   intro x y z hx hy hz
   simp [morton_encode_simple, morton_decode_simple]
-  -- For base-1024 representation, we need to show:
   -- Let n = x + 1024*y + 1024²*z
-  -- Then: n / (1024²) = z, (n % 1024²) / 1024 = y, (n % 1024²) % 1024 = x
-  -- This follows from properties of division and modulo with the bounds on x,y,z
-  sorry -- Arithmetic properties of div/mod
+  -- We need to show:
+  -- 1. n / (1024²) = z
+  -- 2. (n % (1024²)) / 1024 = y
+  -- 3. (n % (1024²)) % 1024 = x
+  -- This follows from base-1024 representation properties
+  sorry -- Arithmetic properties of div/mod for base-1024
 
 /-- Helper: Morton decode is left inverse of encode for small values -/
 lemma morton_decode_encode : ∀ x y z : ℕ,

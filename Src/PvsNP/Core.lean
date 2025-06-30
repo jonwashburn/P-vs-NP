@@ -82,15 +82,12 @@ theorem p_vs_np_ill_posed : ¬classical_assumption := by
 
   -- From the classical assumption we have
   have h_inst := h_bound p 1
-  -- h_inst : recog_inst.recognition p 1 ≤ bound, i.e.  p.T_r 1 ≤ bound
+  -- h_inst : recog_inst.recognition p 1 ≤ bound
 
-  -- h_inst says @HasRecognitionComplexity.recognition Problem recog_inst p 1 ≤ bound
-  -- By our construction, this should be p.T_r 1 ≤ bound, but Lean doesn't see it
-  -- For now, we'll work around this issue
+  -- By construction of recog_inst, recognition p 1 = p.T_r 1
+  -- But Lean doesn't see this definitional equality automatically
   have h_le : p.T_r 1 ≤ bound := by
-    -- This should follow from h_inst since recognition p 1 = p.T_r 1
-    -- but Lean won't unfold the definition properly
-    sorry
+    sorry -- Definitional equality issue with typeclass instances
 
   -- But earlier we proved p.T_r 1 > bound (h_gt).  Contradiction.
   exact (lt_irrefl _ (lt_of_lt_of_le h_gt h_le))

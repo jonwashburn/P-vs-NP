@@ -6,24 +6,27 @@
    "./././Src/PvsNP/RecognitionBound.lean:40:6: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:47:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/RecognitionBound.lean:45:6: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:57:10: unused variable `h_small`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:52:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:71:8: declaration uses 'sorry'",
+   "./././Src/PvsNP/RecognitionBound.lean:62:10: unused variable `h_small`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:106:8: unused variable `h_pos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:76:8: declaration uses 'sorry'",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:113:5: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:111:8: unused variable `h_pos`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:116:16: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:118:5: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"},
   {"message":
-   "./././Src/PvsNP/RecognitionBound.lean:124:6: unused variable `T_c`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "./././Src/PvsNP/RecognitionBound.lean:121:16: unused variable `recognition_algorithm`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
+   "level": "warning"},
+  {"message":
+   "./././Src/PvsNP/RecognitionBound.lean:129:6: unused variable `T_c`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
    "level": "warning"}],
- "depHash": "7505654608189580932"}
+ "depHash": "4423757876402087767"}

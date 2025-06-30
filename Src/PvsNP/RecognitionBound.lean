@@ -36,17 +36,22 @@ def encode_bit {n : ℕ} (code : BalancedParityCode n) (b : Bool) : Fin n → Bo
     -- For bit 0, use mask directly
     code.mask
 
+/-- Helper lemma: Count of odd numbers in Fin (4*m) is exactly 2*m -/
+lemma card_odds (m : ℕ) :
+  (Finset.univ.filter (fun (i : Fin (4*m)) => i.val % 2 = 1)).card = 2*m := by
+  sorry -- Bijection between Fin (2*m) and odd numbers in Fin (4*m)
+
 /-- Helper: The mask has exactly n/2 ones -/
 lemma mask_count_ones {n : ℕ} (code : BalancedParityCode n) :
   (Finset.univ.filter (fun i => code.mask i)).card = n / 2 := by
-  sorry -- Counting odd numbers in range [0, n)
+  sorry -- Follows from card_odds since mask i = (i.val % 2 = 1)
 
 /-- The parity of encoded bit differs for 0 and 1
 This is a fundamental property of balanced-parity encoding schemes -/
 @[simp]
 theorem encoded_parity_correct {n : ℕ} (code : BalancedParityCode n) (b : Bool) :
   (Finset.univ.filter (fun i => encode_bit code b i)).card % 2 = if b then 1 else 0 := by
-  sorry -- Parity analysis of balanced encoding
+  sorry -- For b=false: count = n/2 (even), for b=true: count = n/2 + 1 (odd)
 
 /-- Any subset of size < n/2 reveals no information -/
 theorem balanced_parity_property {n : ℕ} (code : BalancedParityCode n) :
