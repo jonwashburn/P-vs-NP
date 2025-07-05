@@ -66,27 +66,31 @@ def neighborhood (p : Position3D) : List Position3D :=
         {x := p.x + dx, y := p.y + dy, z := p.z + dz}
 
 /-- Block update rule (implements Toffoli/Fredkin gates) -/
-def block_update (config : CAConfig) (center : Position3D) : CAState :=
-  -- This would implement the reversible logic gates
-  -- For now, implement a simple rule based on center and neighbors
-  let neighbors := neighborhood center
-  let states := neighbors.map config
-  match config center with
-  | CAState.AND_WAIT =>
-    -- Simple AND gate logic
-    if states.any (· = CAState.WIRE_HIGH) then CAState.AND_EVAL else CAState.AND_WAIT
-  | CAState.OR_WAIT =>
-    -- Simple OR gate logic
-    if states.any (· = CAState.WIRE_HIGH) then CAState.OR_EVAL else CAState.OR_WAIT
-  | CAState.NOT_GATE =>
-    -- NOT gate inverts
-    CAState.WIRE_LOW
-  | CAState.HALT => CAState.HALT  -- Halt state is stable
-  | s => s  -- Other states remain unchanged for now
+def block_update (config : CAConfig) : CAConfig :=
+  fun p =>
+    -- Only update based on immediate neighbors (distance 1)
+    let neighbors := neighborhood p
+    let states := neighbors.map config
+    match config p with
+    | CAState.AND_WAIT =>
+      -- AND gate evaluates when both inputs are present
+      let high_count := states.filter (· = CAState.WIRE_HIGH) |>.length
+      if high_count ≥ 2 then CAState.AND_EVAL else CAState.AND_WAIT
+    | CAState.OR_WAIT =>
+      -- OR gate evaluates when any input is high
+      if states.any (· = CAState.WIRE_HIGH) then CAState.OR_EVAL else CAState.OR_WAIT
+    | CAState.NOT_GATE =>
+      -- NOT gate inverts adjacent wire
+      if states.any (· = CAState.WIRE_HIGH) then CAState.WIRE_LOW else CAState.WIRE_HIGH
+    | CAState.WIRE_LOW =>
+      -- Wires propagate signals from neighbors
+      if states.any (· = CAState.WIRE_HIGH) then CAState.WIRE_HIGH else CAState.WIRE_LOW
+    | CAState.HALT => CAState.HALT  -- Halt state is stable
+    | s => s  -- Other states remain unchanged
 
 /-- One step of CA evolution (all blocks updated in parallel) -/
 def ca_step (config : CAConfig) : CAConfig :=
-  fun p => block_update config p
+  block_update config
 
 /-- Run CA for n steps -/
 def ca_run (initial : CAConfig) : ℕ → CAConfig
