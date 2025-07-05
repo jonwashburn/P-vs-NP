@@ -54,3 +54,13 @@ git push origin main
 ```
 
 After pushing, open a PR (or just push to `main` if that's the workflow) so collaborators can self-assign items from SPRINT A/B/C. 
+
+SATEncoding.correct
+   ↓
+ca_run_simulates_sat
+   ↓     (signal_speed)
+sat_computation_complexity
+   ↓
+computation_recognition_gap
+   ↓
+main_theorem : P ≠ NP 

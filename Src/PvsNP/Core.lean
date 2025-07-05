@@ -87,7 +87,9 @@ theorem p_vs_np_ill_posed : ¬classical_assumption := by
   -- By construction of recog_inst, recognition p 1 = p.T_r 1
   -- But Lean doesn't see this definitional equality automatically
   have h_le : p.T_r 1 ≤ bound := by
-    sorry -- Definitional equality issue with typeclass instances
+    -- h_inst gives us: recog_inst.recognition p 1 ≤ bound
+    -- By definition of recog_inst, this is exactly p.T_r 1 ≤ bound
+    exact h_inst
 
   -- But earlier we proved p.T_r 1 > bound (h_gt).  Contradiction.
   exact (lt_irrefl _ (lt_of_lt_of_le h_gt h_le))

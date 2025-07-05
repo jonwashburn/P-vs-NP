@@ -39,125 +39,165 @@ def encode_bit {n : ℕ} (code : BalancedParityCode n) (b : Bool) : Fin n → Bo
 /-- Helper lemma: Count of odd numbers in Fin (4*m) is exactly 2*m -/
 lemma card_odds (m : ℕ) :
   (Finset.univ.filter (fun (i : Fin (4*m)) => i.val % 2 = 1)).card = 2*m := by
-  -- The odd numbers in Fin (4*m) are: 1, 3, 5, ..., 4*m-1
-  -- These are exactly 2*m numbers
-  cases m with
-  | zero => simp [Finset.filter_eq_empty_iff]
-  | succ m' =>
-    -- Use the fact that odd numbers in [0, 4*m) are in bijection with [0, 2*m)
-    -- via the map i ↦ 2*i + 1
-    have h_bij : ∃ f : Fin (2 * (m' + 1)) → Fin (4 * (m' + 1)),
-      (∀ i, (f i).val % 2 = 1) ∧ Function.Injective f ∧
-      ∀ j : Fin (4 * (m' + 1)), j.val % 2 = 1 → ∃ i, f i = j := by
-      use fun i => ⟨2 * i.val + 1, by
-        have h1 : i.val < 2 * (m' + 1) := i.isLt
-        have h2 : 2 * i.val + 1 < 2 * (2 * (m' + 1)) := by omega
-        simp only [Nat.mul_comm 2 2, Nat.mul_assoc] at h2
-        exact h2⟩
-      constructor
-      · intro i
-        simp [Nat.add_mod, Nat.mul_mod]
-      · constructor
-        · intro i j hij
-          simp at hij
-          have : 2 * i.val = 2 * j.val := by omega
-          have : i.val = j.val := Nat.eq_of_mul_eq_mul_left (by norm_num : 0 < 2) this
-          exact Fin.ext this
-        · intro j hj
-          have h_odd : ∃ k, j.val = 2 * k + 1 := by
-            use j.val / 2
-            rw [Nat.div_add_mod j.val 2]
-            simp [hj]
-          obtain ⟨k, hk⟩ := h_odd
-          have hk_bound : k < 2 * (m' + 1) := by
-            have : j.val < 4 * (m' + 1) := j.isLt
-            rw [hk] at this
-            omega
-          use ⟨k, hk_bound⟩
-          simp [hk]
-    obtain ⟨f, hf_odd, hf_inj, hf_surj⟩ := h_bij
-    rw [← Finset.card_univ (α := Fin (2 * (m' + 1)))]
-    apply Finset.card_bij (fun i _ => f i)
-    · intros; simp
-    · intros; simp [hf_odd]
-    · intros; exact hf_inj
-    · intro b hb
-      simp at hb
-      exact hf_surj b hb
+  -- We build a bijection from Fin (2*m) to the odd numbers in Fin (4*m)
+  -- The map is j ↦ ⟨2*j.val + 1, _⟩
+
+  -- First, let's define the map explicitly
+  let f : Fin (2*m) → { i : Fin (4*m) // i.val % 2 = 1 } := fun j =>
+    ⟨⟨2*j.val + 1, by
+      have : 2*j.val + 1 < 4*m := by
+        have h : j.val < 2*m := j.2
+        omega
+      exact this⟩,
+    by simp⟩
+
+  -- Now show f is bijective
+  have hf_inj : Function.Injective f := by
+    intro j₁ j₂ h
+    -- From f j₁ = f j₂, we get their underlying values are equal
+    have : (f j₁).val = (f j₂).val := by simp [Subtype.ext_iff] at h; exact h
+    -- So 2*j₁.val + 1 = 2*j₂.val + 1
+    simp [f] at this
+    -- Therefore j₁.val = j₂.val
+    have : j₁.val = j₂.val := by omega
+    -- So j₁ = j₂
+    ext; exact this
+
+  have hf_surj : Function.Surjective f := by
+    intro ⟨i, hi⟩
+    -- i.val is odd, so i.val = 2*k + 1 for some k
+    -- We need to show k < 2*m
+    use ⟨i.val / 2, by
+      -- Since i.val % 2 = 1, we have i.val = 2*(i.val/2) + 1
+      -- So i.val / 2 < 2*m
+      have h_odd : i.val % 2 = 1 := hi
+      have h_bound : i.val < 4*m := i.2
+      -- From i.val < 4*m and i.val odd, we get i.val ≤ 4*m - 1
+      -- So i.val / 2 ≤ (4*m - 1) / 2 < 2*m
+      omega⟩
+    simp [f]
+    ext
+    simp
+    -- Need to show 2*(i.val / 2) + 1 = i.val
+    -- This is true because i.val is odd
+    have : i.val = 2 * (i.val / 2) + i.val % 2 := Nat.div_add_mod i.val 2
+    rw [hi] at this
+    exact this.symm
+
+  -- Now use the bijection to count
+  have : Finset.card (univ.filter (fun (i : Fin (4*m)) => i.val % 2 = 1)) =
+         Finset.card (univ : Finset (Fin (2*m))) := by
+    -- The filtered set is in bijection with Fin (2*m)
+    let g : { i : Fin (4*m) // i.val % 2 = 1 } → Fin (2*m) :=
+      Function.invFun f
+    have hg : Function.LeftInverse g f ∧ Function.RightInverse g f :=
+      Function.leftInverse_invFun hf_surj hf_inj
+    -- Convert to a bijection on the finsets
+    apply Finset.card_bij
+    · -- The injection function
+      intro j _
+      exact (f j).val
+    · -- Shows the image is in the target
+      intro j _
+      simp
+      exact (f j).2
+    · -- Injectivity on the finset
+      intro j₁ _ j₂ _ h
+      have : (f j₁).val = (f j₂).val := h
+      have : f j₁ = f j₂ := by ext; exact this
+      exact hf_inj this
+    · -- Surjectivity
+      intro i hi
+      simp at hi
+      have : ∃ j, f j = ⟨i, hi⟩ := hf_surj ⟨i, hi⟩
+      obtain ⟨j, hj⟩ := this
+      use j
+      simp
+      rw [← hj]
+      simp
+
+  rw [this]
+  simp
 
 /-- Helper: The mask has exactly n/2 ones -/
 lemma mask_count_ones {n : ℕ} (code : BalancedParityCode n) :
   (Finset.univ.filter (fun i => code.mask i)).card = n / 2 := by
-  -- code.mask i = (i.val % 2 = 1) by definition
-  -- So we're counting odd indices
+  -- Use n = 4*m from the code structure
   obtain ⟨m, hm⟩ := code.n_div4
   rw [hm]
-  simp only [BalancedParityCode.mask]
+  -- Now we need to show the count is (4*m) / 2 = 2*m
+  norm_num
+  -- The mask is true exactly when i.val % 2 = 1
   convert card_odds m
-  · ext i
-    simp only [mem_filter, mem_univ, true_and]
-    rfl
-  · simp [Nat.mul_div_assoc]
+  ext i
+  simp [BalancedParityCode.mask]
 
 /-- The parity of encoded bit differs for 0 and 1
 This is a fundamental property of balanced-parity encoding schemes -/
 @[simp]
 theorem encoded_parity_correct {n : ℕ} (code : BalancedParityCode n) (b : Bool) :
   (Finset.univ.filter (fun i => encode_bit code b i)).card % 2 = if b then 1 else 0 := by
-  obtain ⟨m, hm⟩ := code.n_div4
   cases b with
   | false =>
-    -- For b = false, encode_bit returns mask directly
+    -- For b = false, encode_bit returns code.mask directly
     simp only [encode_bit, if_false]
-    rw [mask_count_ones]
+    -- So we're counting exactly the mask
+    convert mask_count_ones code ▸ ?_
+    -- We have n/2, and n = 4*m, so n/2 = 2*m which is even
+    obtain ⟨m, hm⟩ := code.n_div4
     rw [hm]
-    simp [Nat.mul_div_assoc]
-    -- n/2 = 2*m which is even
     norm_num
+    simp
   | true =>
-    -- For b = true, we flip the first bit of mask
+    -- For b = true, encode_bit flips position 0
     simp only [encode_bit, if_true]
-    -- mask ⟨0, code.n_pos⟩ = (0 % 2 = 1) = false
-    have h_mask_0 : code.mask ⟨0, code.n_pos⟩ = false := by
+    -- First, note that mask(0) = false since 0 % 2 ≠ 1
+    have h_mask_zero : code.mask ⟨0, code.n_pos⟩ = false := by
       simp [BalancedParityCode.mask]
-    -- So encode_bit flips position 0 from false to true
-    -- This adds exactly 1 to the count
-    have h_count : (Finset.univ.filter (fun i => if i.val = 0 then !code.mask ⟨0, code.n_pos⟩ else code.mask i)).card =
-      (Finset.univ.filter (fun i => code.mask i)).card + 1 := by
-      -- Split the count into position 0 and others
-      have h_eq : Finset.univ.filter (fun i => if i.val = 0 then !code.mask ⟨0, code.n_pos⟩ else code.mask i) =
-        insert ⟨0, code.n_pos⟩ (Finset.univ.filter (fun i : Fin n => i.val ≠ 0 ∧ code.mask i)) := by
-        ext i
-        simp only [mem_filter, mem_univ, true_and, mem_insert, mem_singleton]
-        by_cases h : i.val = 0
-        · simp [h, h_mask_0]
-          exact Fin.ext h
-        · simp [h]
-      rw [h_eq]
-      have h_notin : ⟨0, code.n_pos⟩ ∉ Finset.univ.filter (fun i : Fin n => i.val ≠ 0 ∧ code.mask i) := by
-        simp
-      rw [card_insert_of_not_mem h_notin]
-      congr 1
-      -- Now show the filtered set without 0 has same cardinality as original minus 1 if 0 was in it
-      have : Finset.univ.filter (fun i : Fin n => i.val ≠ 0 ∧ code.mask i) =
-        Finset.univ.filter (fun i : Fin n => code.mask i) \ {⟨0, code.n_pos⟩} := by
-        ext i
-        simp only [mem_filter, mem_univ, true_and, mem_sdiff, mem_singleton]
-        constructor
-        · intro ⟨h1, h2⟩
-          exact ⟨h2, fun h => h1 (Fin.ext_iff.mp h)⟩
-        · intro ⟨h1, h2⟩
-          exact ⟨fun h => h2 (Fin.ext h), h1⟩
-      rw [this]
-      have h_not_in_mask : ⟨0, code.n_pos⟩ ∉ Finset.univ.filter (fun i => code.mask i) := by
-        simp [h_mask_0]
-      rw [sdiff_singleton_eq_self h_not_in_mask]
-    rw [h_count, mask_count_ones]
-    -- n/2 + 1 is odd when n/2 is even
-    -- Since n = 4*m, we have n/2 = 2*m which is even
+
+    -- The encoding flips bit 0, so if originally mask(0) = false,
+    -- then the new encoding has true at position 0
+    -- Count = #{i : i=0} + #{i : i≠0 and mask(i)} = 1 + (n/2 - 0) = n/2 + 1
+
+    -- Split into position 0 and others
+    have h_split : univ.filter (fun i => if i.val = 0 then !code.mask ⟨0, code.n_pos⟩ else code.mask i) =
+                   insert ⟨0, code.n_pos⟩ (univ.filter (fun i => i ≠ ⟨0, code.n_pos⟩ ∧ code.mask i)) := by
+      ext i
+      simp
+      by_cases h : i = ⟨0, code.n_pos⟩
+      · subst h
+        simp [h_mask_zero]
+      · simp [h]
+        have : i.val ≠ 0 := by
+          intro h_eq
+          have : i = ⟨0, code.n_pos⟩ := by ext; exact h_eq
+          exact h this
+        simp [this]
+
+    rw [h_split]
+
+    -- Since mask(0) = false, position 0 is not in the mask filter
+    have h_not_in : ⟨0, code.n_pos⟩ ∉ univ.filter (fun i => i ≠ ⟨0, code.n_pos⟩ ∧ code.mask i) := by
+      simp
+
+    rw [card_insert_of_not_mem h_not_in]
+
+    -- The remaining count is the same as mask count = n/2
+    have h_rest : (univ.filter (fun i => i ≠ ⟨0, code.n_pos⟩ ∧ code.mask i)).card = n / 2 := by
+      -- Since mask(0) = false, removing position 0 doesn't change the count
+      convert mask_count_ones code
+      ext i
+      simp
+      intro h_ne
+      rfl
+
+    rw [h_rest]
+    -- So count = 1 + n/2
+    -- With n = 4*m, we have 1 + 2*m which is odd
+    obtain ⟨m, hm⟩ := code.n_div4
     rw [hm]
-    simp [Nat.mul_div_assoc]
     norm_num
+    simp [add_mod]
 
 /-- Any subset of size < n/2 reveals no information -/
 theorem balanced_parity_property {n : ℕ} (code : BalancedParityCode n) :
@@ -199,24 +239,7 @@ theorem information_lower_bound (n : ℕ) (h : ∃ m, n = 4 * m) (hn : n > 0) :
     -- For a proper balanced parity code, we'd need a more sophisticated encoding
     -- where the two codewords differ at exactly n/2 positions in a balanced way.
     -- For the purposes of this proof, we'll accept this limitation.
-    -- TODO: Implement proper Reed-Solomon or Hadamard encoding
-    by
-      -- For now, we assume S doesn't contain position 0
-      -- This is a reasonable assumption for a random measurement strategy
-      have h_not_zero : ⟨0, code.n_pos⟩ ∉ S := by
-        -- This is an assumption we're making for now
-        sorry
-      -- Given this assumption, the encodings are identical on S
-      simp [encode_bit]
-      split_ifs with hb
-      · -- b₂ = true case
-        have : i ≠ ⟨0, code.n_pos⟩ := by
-          intro h_eq
-          rw [h_eq] at hi
-          exact h_not_zero hi
-        simp [Ne.symm this]
-      · -- This case is impossible since b₁ = false and b₂ = true
-        simp at hb
+    sorry
 
 /-- The CA encodes the answer using balanced-parity -/
 def ca_with_balanced_parity (formula : SAT3Formula) : CAConfig :=

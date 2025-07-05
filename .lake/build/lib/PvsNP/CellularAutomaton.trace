@@ -1,8 +1,0 @@
-{"log":
- [{"message":
-   ".> LEAN_PATH=././.lake/packages/batteries/.lake/build/lib:././.lake/packages/Qq/.lake/build/lib:././.lake/packages/aesop/.lake/build/lib:././.lake/packages/proofwidgets/.lake/build/lib:././.lake/packages/Cli/.lake/build/lib:././.lake/packages/importGraph/.lake/build/lib:././.lake/packages/LeanSearchClient/.lake/build/lib:././.lake/packages/mathlib/.lake/build/lib:././.lake/build/lib DYLD_LIBRARY_PATH= /Users/jonathanwashburn/.elan/toolchains/leanprover--lean4---v4.12.0/bin/lean -DautoImplicit=false ./././Src/PvsNP/CellularAutomaton.lean -R ./././Src -o ././.lake/build/lib/PvsNP/CellularAutomaton.olean -i ././.lake/build/lib/PvsNP/CellularAutomaton.ilean -c ././.lake/build/ir/PvsNP/CellularAutomaton.c --json",
-   "level": "trace"},
-  {"message":
-   "./././Src/PvsNP/CellularAutomaton.lean:117:25: unused variable `initial`\nnote: this linter can be disabled with `set_option linter.unusedVariables false`",
-   "level": "warning"}],
- "depHash": "6269575991071119456"}
