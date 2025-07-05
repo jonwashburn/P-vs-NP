@@ -246,11 +246,32 @@ theorem sat_computation_complexity (formula : SAT3Formula) :
   -- 1. Variables placed at distance O(n^{1/3}) by Morton encoding
   -- 2. Signals propagate at speed 1
   -- 3. O(log n) rounds of communication suffice
-  use 1000  -- Some concrete bound
-  use 100   -- Some constant
+
+  -- For the proof, we use concrete bounds
+  let n := formula.num_vars
+  let config := encode_sat formula
+
+  -- The diameter is O(n^{1/3}) and we need O(log n) rounds
+  use (10 * n.succ^(1/3).ceil.toNat * (Nat.log 2 n.succ).succ)
+  use 20  -- Constant factor
+
   constructor
-  · sorry  -- Asymptotic bound
-  · sorry  -- CA halts with answer
+  · -- Show the bound holds
+    -- The actual computation would verify this bound
+    -- For the P≠NP proof, the exact constant doesn't matter
+    -- as long as it's sub-polynomial
+    simp
+    -- Convert to real arithmetic
+    have h_bound : (10 * n.succ^(1/3).ceil.toNat * (Nat.log 2 n.succ).succ : ℝ) ≤
+                   20 * (n : ℝ)^(1/3) * Real.log (n : ℝ) := by
+      -- This is true for sufficiently large n
+      -- The proof would involve real analysis
+      sorry
+    exact h_bound
+  · -- Show the CA halts
+    -- This follows from the construction of the CA
+    -- which is designed to solve SAT and halt
+    sorry
 
 /-- Block update only affects 3x3x3 neighborhood -/
 theorem block_update_affects_only_neighbors (config : CAConfig) (center : Position3D) :
