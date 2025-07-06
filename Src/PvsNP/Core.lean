@@ -127,13 +127,8 @@ theorem eight_beat_structure :
   Foundation7_EightBeat := by
   -- The eight-beat structure emerges from fundamental spatial quantization
   -- Recognition requires 8 fundamental spatial directions in 3D+time
-  use (fun _ : Fin 8 => Unit)  -- Each beat corresponds to a spatial direction
-  intro _
-  -- Each beat is well-defined in the 8-fold spatial quantization
-  -- The 8-periodicity follows from the 8 fundamental directions:
-  -- (+x,+y,+z,+t), (-x,-y,-z,-t) and their complements
-  -- Since the function always returns Unit, the equality is trivial
-  rfl
+  -- TODO: Complete proof once Foundation7_EightBeat definition is available
+  sorry
 
 /-- Golden ratio emerges from self-similarity requirements -/
 theorem golden_ratio_emergence :
