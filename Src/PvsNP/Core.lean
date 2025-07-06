@@ -123,11 +123,11 @@ theorem recognition_instances_exist :
   trivial
 
 /-- The eight-beat structure emerges necessarily -/
-theorem eight_beat_structure : Foundation7_EightBeat := by
-  -- Provide the witness: a constant function to Unit
-  use fun _ : Fin 8 => Unit
-  -- The periodicity condition is trivial since the function is constant
-  simp
+theorem eight_beat_structure : Foundation7_EightBeat :=
+  -- We provide the witness `fun _ => Unit` and a proof of periodicity.
+  -- The proof is `fun k => rfl`, which works because both sides of the
+  -- equality are definitionally `Unit`.
+  ⟨fun _ => Unit, fun _ => rfl⟩
 
 /-- Golden ratio emerges from self-similarity requirements -/
 theorem golden_ratio_emergence :
