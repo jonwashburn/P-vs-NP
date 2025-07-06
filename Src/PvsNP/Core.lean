@@ -132,6 +132,7 @@ theorem eight_beat_structure :
   -- Each beat is well-defined in the 8-fold spatial quantization
   -- The 8-periodicity follows from the 8 fundamental directions:
   -- (+x,+y,+z,+t), (-x,-y,-z,-t) and their complements
+  -- Since the function always returns Unit, the equality is trivial
   rfl
 
 /-- Golden ratio emerges from self-similarity requirements -/
