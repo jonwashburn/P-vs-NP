@@ -93,7 +93,26 @@ theorem recognition_science_resolution :
   · -- Recognition Science correction holds
     intro prob inst n
     -- For our simplified model, this follows by definition
-    sorry -- In full Recognition Science, all problems satisfy this
+    -- Any physically realizable problem must have positive recognition cost
+    have h_pos : n > 0 → measurement_recognition_complexity n > 0 := by
+      intro h_n_pos
+      simp [measurement_recognition_complexity]
+      linarith
+    -- For the inequality we need, we can show that our base measurement complexity
+    -- provides a lower bound for any problem's recognition complexity
+    by_cases h : n = 0
+    · -- If n = 0, both sides are 0
+      simp [h, measurement_recognition_complexity]
+      -- When n = 0, both sides are 0, so 0 ≤ 0
+      linarith
+    · -- If n > 0, then measurement_recognition_complexity n > 0
+      have h_n_pos : n > 0 := Nat.pos_of_ne_zero h
+      have h_base_pos := h_pos h_n_pos
+      -- The measurement recognition provides a baseline for any problem
+      have h_baseline : measurement_recognition_complexity n ≤ prob.measurement_recognition inst n := by
+        -- This follows from the fact that any recognition task has this minimum cost
+        sorry -- This requires axiom about recognition cost baseline
+      exact h_baseline
   · -- The fundamental separation
     exact computation_recognition_separation
 
@@ -111,6 +130,7 @@ theorem recognition_instances_exist :
   -- That something must be recognizable (else indistinguishable from nothing)
   use X
   use ⟨hX.some, hX.some, id, Function.injective_id⟩
+  trivial
 
 /-- The eight-beat structure emerges necessarily -/
 theorem eight_beat_structure :
@@ -168,6 +188,7 @@ theorem zero_free_parameters_verification :
       | inl h_lambda =>
         -- lambda_rec derives from information theory + holographic principle
         use True  -- Complete derivation in ledger-foundation
+        trivial
       | inr h_rest3 =>
         cases h_rest3 with
         | inl h_tau =>
@@ -177,5 +198,6 @@ theorem zero_free_parameters_verification :
         | inr h_one =>
           -- 1 is the identity element (pure logic)
           use True
+          trivial
 
 end PvsNP
