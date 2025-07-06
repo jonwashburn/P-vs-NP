@@ -8,6 +8,7 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Data.Fintype.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace PvsNP.RSFoundation
 
@@ -36,7 +37,7 @@ structure Recognition (A B : Type) where
   injective : Function.Injective map
 
 /-- The meta-principle holds: Nothing cannot recognize itself -/
-axiom meta_principle_holds : ¬(Recognition Nothing Nothing)
+axiom meta_principle_holds : ¬∃ (_ : Recognition Nothing Nothing), True
 
 /-- Something must exist (derived from meta-principle) -/
 theorem something_exists : ∃ (X : Type), Nonempty X := by
@@ -111,24 +112,24 @@ logical necessity. No free parameters exist.
 -/
 
 /-- The golden ratio φ = (1 + √5)/2 -/
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
+noncomputable def phi : ℝ := (1 + Real.sqrt 5) / 2
 
 /-- Golden ratio property -/
-theorem golden_ratio_property : φ^2 = φ + 1 := by
+theorem golden_ratio_property : phi^2 = phi + 1 := by
   -- φ = (1 + √5)/2, so φ^2 = φ + 1
-  field_simp [φ]
+  field_simp [phi]
   ring_nf
   simp [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 5)]
   ring
 
-/-- Recognition length scale λ_rec = √(ln(2)/π) -/
-noncomputable def λ_rec : ℝ := Real.sqrt (Real.log 2 / Real.pi)
+/-- Recognition length scale -/
+noncomputable def lambda_rec : ℝ := Real.sqrt (Real.log 2 / Real.pi)
 
-/-- Coherent energy quantum E_coh = (φ/π)/λ_rec -/
-noncomputable def E_coh : ℝ := (φ / Real.pi) / λ_rec
+/-- Coherent energy quantum -/
+noncomputable def E_coh : ℝ := (phi / Real.pi) / lambda_rec
 
-/-- Fundamental tick τ₀ = ln(φ)/(8×E_coh) -/
-noncomputable def τ₀ : ℝ := Real.log φ / (8 * E_coh)
+/-- Fundamental tick -/
+noncomputable def tau_0 : ℝ := Real.log phi / (8 * E_coh)
 
 /-!
 ## The Complete Derivation Chain
@@ -155,8 +156,8 @@ theorem all_foundations_from_meta : MetaPrinciple →
 /-- Zero free parameters: Only φ, E_coh, and 1 are fundamental -/
 theorem zero_free_parameters :
   ∀ (constant : ℝ),
-  (constant = φ ∨ constant = E_coh ∨ constant = 1) ∨
-  ∃ (n : ℕ), constant = φ^n := by
+  (constant = phi ∨ constant = E_coh ∨ constant = 1) ∨
+  ∃ (n : ℕ), constant = phi^n := by
   -- All physics constants are powers of φ or derived combinations
   -- This is the φ-ladder structure from Recognition Science
   sorry -- ACCEPTED: φ-ladder derivation in ledger-foundation
@@ -169,12 +170,12 @@ separating computation complexity from recognition complexity.
 -/
 
 /-- Computation occurs at substrate scale with φ-based efficiency -/
-def substrate_computation_complexity (n : ℕ) : ℝ :=
+noncomputable def substrate_computation_complexity (n : ℕ) : ℝ :=
   -- O(n^{1/3} log n) from 3D substrate + φ-scaling
   (n : ℝ)^(1/3) * Real.log (n : ℝ)
 
 /-- Recognition occurs at measurement scale with linear cost -/
-def measurement_recognition_complexity (n : ℕ) : ℝ :=
+noncomputable def measurement_recognition_complexity (n : ℕ) : ℝ :=
   -- Ω(n) from balanced parity encoding requirements
   (n : ℝ) / 2
 
@@ -187,7 +188,7 @@ theorem computation_recognition_separation :
   intro ε hε
   -- As n → ∞, (n^{1/3} log n) / (n/2) = 2n^{-2/3} log n → 0
   -- This is the fundamental basis for P ≠ NP
-  use max 1000 (Real.exp (1/ε))
+  use Nat.ceil (max 1000 (1/ε))
   intro n h_large
   simp [substrate_computation_complexity, measurement_recognition_complexity]
   -- The ratio approaches 0 as n increases
