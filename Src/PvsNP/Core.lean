@@ -132,8 +132,7 @@ theorem eight_beat_structure :
   -- Each beat is well-defined in the 8-fold spatial quantization
   -- The 8-periodicity follows from the 8 fundamental directions:
   -- (+x,+y,+z,+t), (-x,-y,-z,-t) and their complements
-  ext
-  simp
+  rfl
 
 /-- Golden ratio emerges from self-similarity requirements -/
 theorem golden_ratio_emergence :
@@ -142,15 +141,17 @@ theorem golden_ratio_emergence :
   use phi
   constructor
   · -- phi > 0 from Recognition Science foundations
-    simp [phi]
-    -- (1 + √5) / 2 > 0 because both numerator and denominator are positive
-    have h_num : (1 : ℝ) + Real.sqrt 5 > 0 := by
+    -- phi = (1 + √5) / 2 > 0 because both numerator and denominator are positive
+    show phi > 0
+    unfold phi
+    apply div_pos
+    · -- Show 1 + √5 > 0
       have h5_pos : (5 : ℝ) > 0 := by norm_num
       have sqrt5_pos : Real.sqrt 5 > 0 := Real.sqrt_pos.mpr h5_pos
       have one_pos : (1 : ℝ) > 0 := by norm_num
       linarith [sqrt5_pos, one_pos]
-    have h_den : (2 : ℝ) > 0 := by norm_num
-    exact div_pos h_num h_den
+    · -- Show 2 > 0
+      norm_num
   · -- phi² = phi + 1
     exact golden_ratio_property
 
