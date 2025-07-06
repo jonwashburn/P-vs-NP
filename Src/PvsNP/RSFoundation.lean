@@ -58,8 +58,8 @@ noncomputable def lambda_rec : ℝ := (rec_length_num : ℝ) / (rec_length_den :
 /-- Recognition length is positive (proven) -/
 theorem lambda_rec_pos : 0 < lambda_rec := by
   -- λ_rec = 469 / 1000 > 0
-  have : (0 : ℝ) < (469 : ℝ) / 1000 := by norm_num
-  simpa [lambda_rec, rec_length_num, rec_length_den] using this
+  simp only [lambda_rec, rec_length_num, rec_length_den]
+  norm_num
 
 /-- Coherence quantum numerator -/
 def E_coh_num : ℕ := phi_num * rec_length_den
@@ -71,9 +71,8 @@ noncomputable def E_coh : ℝ := (E_coh_num : ℝ) / (E_coh_den : ℝ)
 /-- Coherence quantum is positive (proven) -/
 theorem E_coh_pos : 0 < E_coh := by
   -- E_coh = (1618 * 1000) / (1000 * 469) > 0
-  have : (0 : ℝ) < (1618 : ℝ) * 1000 / (1000 * 469) := by
-    norm_num
-  simpa [E_coh, E_coh_num, E_coh_den, phi_num, phi_den, rec_length_num, rec_length_den] using this
+  simp only [E_coh, E_coh_num, E_coh_den, phi_num, phi_den, rec_length_num, rec_length_den]
+  norm_num
 
 /-!
 ## The Eight Foundations

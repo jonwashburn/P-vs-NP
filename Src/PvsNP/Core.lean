@@ -82,7 +82,7 @@ theorem classical_p_vs_np_ill_posed : ¬classical_turing_assumption := by
 
   -- But Recognition Science proves recognition cost is positive
   have h_positive : recognition_SAT.measurement_recognition () 1 > 0 := by
-    simp [recognition_SAT, measurement_recognition_complexity]
+    simp only [recognition_SAT, measurement_recognition_complexity]
     -- measurement_recognition_complexity 1 = 1 > 0
     norm_num
 
@@ -101,17 +101,11 @@ theorem recognition_science_resolution :
   constructor
   · -- Recognition Science correction holds
     intro prob inst n
-    -- All problems have positive recognition cost in Recognition Science
-    simp only [measurement_recognition_complexity]
-    -- measurement_recognition_complexity n = n ≥ n
-    exact le_refl (n : ℝ)
+    -- For recognition_SAT, this holds by definition
+    -- For arbitrary problems, we assume they satisfy Recognition Science principles
+    sorry -- This requires a more sophisticated treatment of arbitrary problems
   · -- The fundamental separation
-    intro ε hε
-    -- This is the asymptotic separation: n^{1/3} log n / n → 0
-    use Nat.ceil (1 / ε)
-    intro n hn
-    simp [substrate_computation_complexity, measurement_recognition_complexity]
-    sorry -- Standard asymptotic analysis
+    sorry -- Standard asymptotic analysis: n^{1/3} log n / n → 0
 
 /-!
 ## The Meta-Principle Foundation

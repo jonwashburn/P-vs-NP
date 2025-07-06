@@ -71,22 +71,22 @@ def block_update (config : CAConfig) : CAConfig :=
   fun p =>
     -- Only update based on immediate neighbors (distance 1)
     let neighbors := neighborhood p
-    let states := neighbors.map config
+  let states := neighbors.map config
     match config p with
-    | CAState.AND_WAIT =>
+  | CAState.AND_WAIT =>
       -- AND gate evaluates when both inputs are present
       let high_count := states.filter (· = CAState.WIRE_HIGH) |>.length
       if high_count ≥ 2 then CAState.AND_EVAL else CAState.AND_WAIT
-    | CAState.OR_WAIT =>
+  | CAState.OR_WAIT =>
       -- OR gate evaluates when any input is high
-      if states.any (· = CAState.WIRE_HIGH) then CAState.OR_EVAL else CAState.OR_WAIT
-    | CAState.NOT_GATE =>
+    if states.any (· = CAState.WIRE_HIGH) then CAState.OR_EVAL else CAState.OR_WAIT
+  | CAState.NOT_GATE =>
       -- NOT gate inverts adjacent wire
       if states.any (· = CAState.WIRE_HIGH) then CAState.WIRE_LOW else CAState.WIRE_HIGH
     | CAState.WIRE_LOW =>
       -- Wires propagate signals from neighbors
       if states.any (· = CAState.WIRE_HIGH) then CAState.WIRE_HIGH else CAState.WIRE_LOW
-    | CAState.HALT => CAState.HALT  -- Halt state is stable
+  | CAState.HALT => CAState.HALT  -- Halt state is stable
     | s => s  -- Other states remain unchanged
 
 /-- One step of CA evolution (all blocks updated in parallel) -/
