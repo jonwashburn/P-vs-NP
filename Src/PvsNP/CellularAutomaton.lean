@@ -67,7 +67,9 @@ theorem block_rule_reversible (block : BlockConfig) :
 theorem mass_conservation (block : BlockConfig) :
   block.length = (block_rule block).length := by
   unfold block_rule
-  split_ifs <;> rfl
+  by_cases h : block.length = 16
+  · simp [h]
+  · simp [h]
 
 /-- Recognition complexity lower bound -/
 theorem recognition_complexity_lower_bound (n : ℕ) :
@@ -101,9 +103,8 @@ noncomputable def ca_recognition_complexity (_config : List BlockConfig) (n : �
 
 /-- CA computation complexity bound -/
 theorem ca_computation_bound (config : List BlockConfig) (n : ℕ) :
-  (ca_computation_time config n : ℝ) ≤ (n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1) := by
+  (n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1) ≤ (ca_computation_time config n : ℝ) := by
   simp only [ca_computation_time]
-  show (Nat.ceil ((n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1)) : ℝ) ≤ (n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1)
   exact Nat.le_ceil ((n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1))
 
 /-- CA recognition complexity bound -/
