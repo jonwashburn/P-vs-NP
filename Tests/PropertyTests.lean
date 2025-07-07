@@ -100,8 +100,20 @@ example : test_recognition_separation 100 (by norm_num) := by
   simp [test_recognition_separation]
   simp [substrate_computation_complexity, measurement_recognition_complexity]
   -- This follows from the asymptotic analysis
+  -- We need to show: 100^(1/3) * log(100) < 50 * 100^(2/3)
+  -- LHS ≈ 4.64 * 4.6 ≈ 21.3
+  -- RHS = 50 * 21.5 ≈ 1075
+  -- So 21.3 < 1075 ✓
   norm_num
-  sorry -- Verified by asymptotic_separation_theorem
+  -- The exact calculation:
+  have h1 : (100 : ℝ)^(1/3 : ℝ) < 5 := by norm_num
+  have h2 : Real.log 100 < 5 := by norm_num
+  have h3 : (100 : ℝ)^(2/3 : ℝ) > 20 := by norm_num
+  calc (100 : ℝ)^(1/3 : ℝ) * Real.log 100
+      < 5 * 5 := by apply mul_lt_mul h1 h2 (Real.log_nonneg (by norm_num : 1 ≤ (100 : ℝ))) (by norm_num)
+    _ = 25 := by norm_num
+    _ < 50 * 20 := by norm_num
+    _ < 50 * (100 : ℝ)^(2/3 : ℝ) := by apply mul_lt_mul_of_pos_left h3 (by norm_num : 0 < 50)
 
 /-!
 ## Guard Conditions
