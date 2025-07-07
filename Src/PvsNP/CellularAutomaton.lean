@@ -55,7 +55,7 @@ def BlockConfig : Type := List CAState
 
 /-- Block rule: simplified identity rule for 16-cell blocks -/
 def block_rule (block : BlockConfig) : BlockConfig :=
-  if h : block.length = 16 then block else block
+  if _h : block.length = 16 then block else block
 
 /-- Block rule is reversible (bijection) -/
 theorem block_rule_reversible (block : BlockConfig) :
@@ -66,9 +66,8 @@ theorem block_rule_reversible (block : BlockConfig) :
 /-- Mass conservation: total "energy" preserved -/
 theorem mass_conservation (block : BlockConfig) :
   block.length = (block_rule block).length := by
-  by_cases h : block.length = 16
-  · simp [block_rule, h]
-  · simp [block_rule, h]
+  unfold block_rule
+  split_ifs <;> rfl
 
 /-- Recognition complexity lower bound -/
 theorem recognition_complexity_lower_bound (n : ℕ) :
@@ -103,8 +102,9 @@ noncomputable def ca_recognition_complexity (_config : List BlockConfig) (n : �
 /-- CA computation complexity bound -/
 theorem ca_computation_bound (config : List BlockConfig) (n : ℕ) :
   (ca_computation_time config n : ℝ) ≤ (n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1) := by
-  simp [ca_computation_time]
-  exact Nat.le_ceil _
+  simp only [ca_computation_time]
+  show (Nat.ceil ((n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1)) : ℝ) ≤ (n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1)
+  exact Nat.le_ceil ((n : ℝ) ^ (1/3 : ℝ) * Real.log ((n : ℝ) + 1))
 
 /-- CA recognition complexity bound -/
 theorem ca_recognition_bound (config : List BlockConfig) (n : ℕ) :

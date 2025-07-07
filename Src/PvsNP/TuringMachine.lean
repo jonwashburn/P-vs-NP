@@ -57,13 +57,22 @@ def unitTM : TM Unit Unit :=
   reject_states := ∅,
   trans         := fun _ _ => none }
 
-/-- Configuration encoding preserves information -/
+/-- Configuration encoding preserves information for non-halting states -/
 theorem config_encoding_correct {State Symbol : Type} [DecidableEq State] [DecidableEq Symbol]
   (M : TM State Symbol) (config : TMConfig State Symbol) :
+  step M config ≠ none →
   ∀ (pos : ℤ), pos ≠ config.head →
   (step M config).map (fun c => c.tape pos) = some (config.tape pos) := by
-  -- This is an implementation detail about TM configuration encoding
-  sorry -- IMPLEMENTATION: TM configuration encoding correctness
+  intro h_not_halt pos h_ne
+  cases config with | mk state tape head =>
+  simp [step]
+  cases h_trans : M.trans state (tape head) with
+  | none =>
+    -- This case is contradicted by h_not_halt
+    simp [step, h_trans] at h_not_halt
+  | some t =>
+    -- Transition case: tape position unchanged if pos ≠ head
+    simp [step, h_trans, Function.update_noteq h_ne]
 
 /-- Step relation is deterministic -/
 theorem step_deterministic {State Symbol : Type} (M : TM State Symbol) (config : TMConfig State Symbol) :
@@ -82,15 +91,13 @@ theorem halting_correct {State Symbol : Type} (M : TM State Symbol) (config : TM
 
 /-- TM computation has finite description -/
 theorem tm_has_finite_description {State Symbol : Type} [Finite State] [Finite Symbol] (_M : TM State Symbol) :
-  ∃ (_n : ℕ), True := by
-  use 1
-  trivial
+  ∃ (_n : ℕ), True :=
+  ⟨1, trivial⟩
 
 /-- Recognition instances exist -/
 theorem recognition_instances_exist :
-  ∃ (X : Type) (_f : X → Bool), True := by
-  use Bool, id
-  trivial
+  ∃ (X : Type) (_f : X → Bool), True :=
+  ⟨Bool, id, trivial⟩
 
 /-- The eight-beat structure emerges necessarily -/
 theorem eight_beat_structure :
