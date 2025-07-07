@@ -200,7 +200,7 @@ theorem all_foundations_from_meta : MetaPrinciple →
       · rfl  -- τ₀ = 1
       · intro t h_pos
         -- t > 0 implies t ≥ 1 for natural numbers
-        exact Nat.one_le_iff_ne_zero.mpr (ne_of_gt h_pos)
+        exact h_pos
     },
     -- Foundation 6: Spatial Voxels
     by {
