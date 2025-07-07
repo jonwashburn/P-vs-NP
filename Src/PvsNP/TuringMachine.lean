@@ -76,13 +76,11 @@ theorem halting_correct {State Symbol : Type} (M : TM State Symbol) (config : TM
 theorem tm_has_finite_description {State Symbol : Type} [Finite State] [Finite Symbol] (M : TM State Symbol) :
   ∃ (n : ℕ), True := by
   use 1
-  trivial
 
 /-- Recognition instances exist -/
 theorem recognition_instances_exist :
-  ∃ (X : Type), ∃ (f : X → Bool), True := by
+  ∃ (X : Type) (f : X → Bool), True := by
   use Bool, id
-  trivial
 
 /-- The eight-beat structure emerges necessarily -/
 theorem eight_beat_structure :
@@ -124,7 +122,10 @@ theorem classical_assumption_contradiction :
   -- But Recognition Science proves recognition cost is positive
   have h_positive : measurement_recognition_complexity input.length > 0 := by
     simp [measurement_recognition_complexity]
-    linarith [h_len_pos]
+    -- For n = 1, we have 1/2 > 0
+    have : (1 : ℝ) / 2 > 0 := by norm_num
+    convert this
+    simp [input]
   -- This is a contradiction
   linarith
 
