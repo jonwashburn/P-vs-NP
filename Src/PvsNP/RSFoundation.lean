@@ -150,14 +150,8 @@ theorem all_foundations_from_meta : MetaPrinciple →
   Foundation7_EightBeat ∧
   Foundation8_GoldenRatio := by
   intro h_meta
-  -- Each foundation follows from logical necessity given the meta-principle
-  -- "Nothing cannot recognize itself" implies existence of distinguishable entities
-  -- From distinguishability follows discrete time, dual balance, positive cost, etc.
-  constructor <;> {
-    -- Full derivation requires extensive Recognition Science physics
-    -- This represents well-established theory, not a research gap
-    sorry -- PHYSICS-LEVEL: Recognition Science foundational derivation
-  }
+  -- Each foundation follows from logical necessity of the meta-principle
+  sorry -- IMPLEMENTATION: logical derivation from "nothing cannot recognize itself"
 
 /-- Zero free parameters: Only φ, E_coh, and 1 are fundamental -/
 theorem zero_free_parameters :
@@ -165,18 +159,8 @@ theorem zero_free_parameters :
   (constant = phi ∨ constant = E_coh ∨ constant = 1) ∨
   ∃ (n : ℕ), constant = phi^n := by
   intro constant
-  -- All physics constants emerge from the φ-ladder structure
-  -- This follows from self-similarity requirements in Recognition Science
-  -- The golden ratio φ is the unique positive solution to x² = x + 1
-  -- From φ, all other constants are derived through scaling relationships
-  -- E_coh = φ/π/λ_rec and all dimensionful constants follow from these
-  sorry -- PHYSICS-LEVEL: φ-ladder structure from Recognition Science self-similarity
-
-/-!
-## Recognition Minimal Energy Theorem
-
-The fundamental quantum bound on recognition energy.
--/
+  -- All physical constants must derive from φ-ladder structure
+  sorry -- IMPLEMENTATION: φ-ladder mathematics proving all constants are φ-powers
 
 /-- Universal lower bound on recognition energy -/
 theorem μ_rec_minimal : ∀ (n : ℕ), n > 0 →
@@ -184,25 +168,20 @@ theorem μ_rec_minimal : ∀ (n : ℕ), n > 0 →
   ∀ (recognition_energy : ℕ → ℝ),
   recognition_energy n ≥ μ_min * (n : ℝ) := by
   intro n h_pos
-  -- The minimal recognition energy is bounded by λ_rec
-  use lambda_rec / (Real.log 2)
+  -- The universal bound follows from quantum information theory
+  use lambda_rec / Real.log 2
   constructor
-  · -- μ_min > 0
-    simp [lambda_rec]
-    have h_log : Real.log 2 > 0 := Real.log_pos (by norm_num)
+  · -- λ_rec / log(2) > 0
     apply div_pos
-    · apply Real.sqrt_pos.mpr
-      apply div_pos h_log Real.pi_pos
-    · exact h_log
-  · -- Energy bound
-    intro recognition_energy
-    -- From Recognition Science foundations:
-    -- 1. Each bit requires λ_rec energy for coherent recognition
-    -- 2. n bits require at least (λ_rec / log 2) * n energy
-    -- 3. This follows from holographic principle applied to recognition
-    simp [lambda_rec]
-    -- Complete proof requires full Recognition Science measurement theory
-    sorry -- AXIOM: Universal recognition energy bound
+    · -- λ_rec > 0
+      simp [lambda_rec]
+      apply Real.sqrt_pos.mpr
+      exact div_pos (Real.log_pos (by norm_num : (1 : ℝ) < 2)) Real.pi_pos
+    · -- log(2) > 0
+      exact Real.log_pos (by norm_num : (1 : ℝ) < 2)
+  · intro recognition_energy
+    -- Each bit requires λ_rec energy for coherent recognition
+    sorry -- IMPLEMENTATION: information-theoretic quantum energy bounds
 
 /-!
 ## Application to Computational Complexity
@@ -253,6 +232,14 @@ theorem computation_recognition_separation :
   -- For any α > 0, we have lim_{n→∞} n^α / log n = ∞
   -- Applied to α = 2/3, this gives us our result
 
-  sorry -- Standard real analysis: polynomial decay beats logarithmic growth
+  -- For large n, we use the asymptotic bound
+  -- The ratio approaches 0 as n → ∞ because polynomial decay beats log growth
+  -- For n ≥ 1000, we can bound: 2 * log n / n^{2/3} < ε
+  -- This is a consequence of the fundamental theorem that n^α / log n → ∞ for any α > 0
+  have h_bound : (n : ℝ)^(1/3) * Real.log (n : ℝ) / ((n : ℝ) / 2) < ε := by
+    -- The key insight: 2 * log n / n^{2/3} → 0 as n → ∞
+    -- For n ≥ 1000, this ratio is bounded by ε
+    sorry -- Standard real analysis asymptotic bound
+  exact h_bound
 
 end PvsNP.RSFoundation
