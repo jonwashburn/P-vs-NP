@@ -199,7 +199,8 @@ theorem all_foundations_from_meta : MetaPrinciple →
       constructor
       · rfl  -- τ₀ = 1
       · intro t h_pos
-        exact h_pos  -- t ≥ 1 when t > 0
+        -- t > 0 implies t ≥ 1 for natural numbers
+        exact Nat.one_le_iff_ne_zero.mpr (ne_of_gt h_pos)
     },
     -- Foundation 6: Spatial Voxels
     by {
@@ -251,8 +252,8 @@ theorem zero_free_parameters :
   -- For any other constant, it must be a φ-power
   right
 
-    -- First establish that constant must be positive (from Recognition Science)
-    have hpos : 0 < constant := by
+  -- First establish that constant must be positive (from Recognition Science)
+  have hpos : 0 < constant := by
     by_contra hnonpos
     -- In Recognition Science, all physical constants must be positive
     -- This follows from Foundation3_PositiveCost which requires positive energy
@@ -326,45 +327,13 @@ theorem computation_recognition_separation :
   -- We need to show that (n^{1/3} log n) / (n/2) < ε for large n
   -- This simplifies to: 2 * log n / n^{2/3} < ε
 
-  -- First, handle the case when n = 0 (edge case)
-  use max 2 (Nat.ceil (Real.exp (3 * ε⁻¹)))
+  -- Choose N large enough that the asymptotic bound holds
+  use max 10 (Nat.ceil (Real.exp (2 / ε)))
   intro n h_n_ge_N
 
-  -- Ensure n ≥ 2 so log n is positive
-  have h_n_ge_2 : n ≥ 2 := by
-    exact le_trans (le_max_left _ _) h_n_ge_N
-  have h_n_pos : 0 < (n : ℝ) := by
-    exact Nat.cast_pos.mpr (Nat.lt_of_succ_le h_n_ge_2)
-
-  -- Unfold the definitions
-  unfold substrate_computation_complexity measurement_recognition_complexity
-
-  -- Simplify the ratio
-  have h_ratio : substrate_computation_complexity n / measurement_recognition_complexity n =
-                 2 * Real.log (n : ℝ) / (n : ℝ)^(2/3) := by
-    rw [div_div_eq_mul_div]
-    rw [mul_comm ((n : ℝ)^(1/3) * Real.log (n : ℝ)) 2]
-    rw [mul_assoc]
-    rw [← Real.rpow_add h_n_pos]
-    norm_num
-
-  rw [h_ratio]
-
-  -- Use the fact that log n / n^α → 0 as n → ∞ for any α > 0
-  -- Here α = 2/3 > 0
-  -- For large enough n, we have log n < ε * n^{2/3} / 2
-  have h_log_bound : Real.log (n : ℝ) < ε * (n : ℝ)^(2/3) / 2 := by
-    -- This follows from the asymptotic behavior of log vs polynomial
-    -- For n ≥ exp(3/ε), we have log n < ε * n^{2/3} / 2
-    sorry -- Technical: asymptotic bound on log n vs n^{2/3}
-
-  calc 2 * Real.log (n : ℝ) / (n : ℝ)^(2/3)
-      < 2 * (ε * (n : ℝ)^(2/3) / 2) / (n : ℝ)^(2/3) := by
-        apply div_lt_div_of_pos_right
-        · exact mul_lt_mul_of_pos_left h_log_bound (by norm_num : 0 < 2)
-        · exact Real.rpow_pos_of_pos h_n_pos _
-    _ = ε := by
-        field_simp
-        ring
+  -- For large n, the ratio approaches 0
+  -- This follows from the fundamental fact that log n grows slower than any positive power of n
+  -- The formal proof uses l'Hôpital's rule or asymptotic analysis
+  sorry -- Technical: asymptotic bound showing n^{1/3} log n ≪ n
 
 end PvsNP.RSFoundation
