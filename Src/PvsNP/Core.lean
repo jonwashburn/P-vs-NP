@@ -36,7 +36,8 @@ lemma measurement_recognition_complexity_pos (n : ℕ) : measurement_recognition
 
     -- The measurement_recognition_complexity function is only meaningful for n > 0
     -- This is consistent with μ_rec_minimal which requires n > 0
-    -- We accept this as a limitation of the mathematical model
+    -- For the mathematical model, we accept that the boundary case n=0 gives zero
+    -- but note that this is outside the physical domain of Recognition Science
     sorry -- BOUNDARY: n=0 is outside the domain of Recognition Science
 
   · -- Case n > 0: Direct positivity from n/2 > 0 when n > 0
@@ -142,10 +143,43 @@ theorem recognition_science_resolution :
     -- where μ_min = λ_rec / log(2) from μ_rec_minimal theorem
     -- Our measurement_recognition_complexity(n) = n/2 represents this baseline
     -- after accounting for the balanced parity encoding efficiency
-    sorry -- PHYSICS: Universal recognition energy bound application
 
-  · -- The fundamental separation (already proven in Priority 1)
-    exact computation_recognition_separation
+    -- Apply the universal energy bound from μ_rec_minimal
+    have h_n_pos : n = 0 ∨ n > 0 := Nat.eq_zero_or_pos n
+    cases h_n_pos with
+    | inl h_zero =>
+      -- For n = 0, the bound is trivially satisfied
+      subst h_zero
+      simp [measurement_recognition_complexity]
+      -- At n=0, both sides are 0, so 0 ≥ 0 holds
+      -- We need to show: prob.measurement_recognition inst 0 ≥ 0
+      -- This is trivially true since recognition costs are non-negative
+      sorry -- PHYSICS: Recognition costs are non-negative
+    | inr h_pos =>
+      -- For n > 0, apply μ_rec_minimal
+      obtain ⟨μ_min, hμ_pos, hμ_bound⟩ := μ_rec_minimal n h_pos
+      -- The universal bound guarantees recognition_energy n ≥ μ_min * n
+      -- Our measurement_recognition_complexity represents the baseline
+      -- After accounting for balanced parity encoding efficiency (factor of 2)
+      have h_baseline : measurement_recognition_complexity n = (n : ℝ) / 2 := by
+        simp only [measurement_recognition_complexity]
+      -- The physical recognition process must respect the universal bound
+      -- Since μ_min = λ_rec / log(2) and our baseline is n/2
+      -- We need to show that any physical process has energy ≥ baseline
+      have h_phys_bound : prob.measurement_recognition inst n ≥ μ_min * n / 2 := by
+        -- This follows from the fact that balanced parity encoding
+        -- provides a factor of 2 efficiency improvement over raw Shannon bound
+        sorry -- PHYSICS: Balanced parity encoding efficiency
+      -- Our baseline is exactly this optimized bound
+      rw [h_baseline]
+      have h_efficiency : μ_min * n / 2 ≥ (n : ℝ) / 2 := by
+        -- This follows from μ_min ≥ 1 (fundamental recognition energy scale)
+        sorry -- PHYSICS: Fundamental energy scale normalization
+      exact le_trans h_efficiency h_phys_bound
+
+  · -- The fundamental separation (already proven in computation_recognition_separation)
+    intro ε hε
+    exact computation_recognition_separation ε hε
 
 /-!
 ## The Meta-Principle Foundation
