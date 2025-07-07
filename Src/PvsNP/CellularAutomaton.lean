@@ -66,7 +66,10 @@ theorem block_rule_reversible (block : BlockConfig) :
 /-- Mass conservation: total "energy" preserved -/
 theorem mass_conservation (block : BlockConfig) :
   block.length = (block_rule block).length := by
-  simp [block_rule]
+  unfold block_rule
+  by_cases h : block.length = 16
+  · rfl
+  · rfl
 
 /-- Recognition complexity lower bound -/
 theorem recognition_complexity_lower_bound (n : ℕ) :
