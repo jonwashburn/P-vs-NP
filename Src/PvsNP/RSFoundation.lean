@@ -199,7 +199,7 @@ theorem all_foundations_from_meta : MetaPrinciple →
       constructor
       · rfl  -- τ₀ = 1
       · intro t h_pos
-        exact Nat.succ_le_iff.mpr h_pos  -- t ≥ 1 when t > 0
+        exact h_pos  -- t ≥ 1 when t > 0
     },
     -- Foundation 6: Spatial Voxels
     by {
@@ -321,63 +321,13 @@ theorem computation_recognition_separation :
   ∀ (ε : ℝ) (hε : ε > 0),
   ∃ (N : ℕ),
   ∀ (n : ℕ), n ≥ N →
-  substrate_computation_complexity n / measurement_recognition_complexity n < ε := by
-  intro ε hε
-  -- As n → ∞, (n^{1/3} log n) / (n/2) = 2n^{-2/3} log n → 0
-  -- This is the fundamental basis for P ≠ NP
-
-  -- Choose N large enough for the asymptotic behavior to dominate
-  use 1000
-
-  intro n h_large
-
-  -- We need to show: substrate_computation_complexity n / measurement_recognition_complexity n < ε
-  -- This is: (n^{1/3} * log n) / (n/2) < ε
-  -- Which simplifies to: 2 * log n / n^{2/3} < ε
-
-  -- Expand the definitions
-  unfold substrate_computation_complexity measurement_recognition_complexity
-
-  -- For n ≥ 1000, the polynomial decay dominates the logarithmic growth
-  -- This is a fundamental result in real analysis
-  -- The key insight: as n → ∞, n^{2/3} / log n → ∞
-  -- Therefore, for sufficiently large n, we have n^{2/3} > 2 log n / ε
-  -- Which gives us the desired bound
-
-  -- This follows from standard asymptotic analysis
-  -- For any α > 0, we have lim_{n→∞} n^α / log n = ∞
-  -- Applied to α = 2/3, this gives us our result
-
-  -- For large n, we use the asymptotic bound
-  -- The ratio approaches 0 as n → ∞ because polynomial decay beats log growth
-  -- For n ≥ 1000, we can bound: 2 * log n / n^{2/3} < ε
-  -- This is a consequence of the fundamental theorem that n^α / log n → ∞ for any α > 0
-  -- For large n, we use the asymptotic bound
-  -- The ratio approaches 0 as n → ∞ because polynomial decay beats log growth
-  -- For n ≥ 1000, we can bound: 2 * log n / n^{2/3} < ε
-  -- This is a consequence of the fundamental theorem that n^α / log n → ∞ for any α > 0
-
-    -- For large n, we use the asymptotic bound
-  -- The ratio approaches 0 as n → ∞ because polynomial decay beats log growth
-  -- For n ≥ 1000, we can bound: 2 * log n / n^{2/3} < ε
-  -- This is a consequence of the fundamental theorem that n^α / log n → ∞ for any α > 0
-
-  -- Simplify the expression algebraically
-  have h_simp : (n : ℝ)^(1/3) * Real.log (n : ℝ) / ((n : ℝ) / 2) =
-                2 * Real.log (n : ℝ) / (n : ℝ)^(2/3) := by
-    -- (n^{1/3} * log n) / (n/2) = 2 * (n^{1/3} * log n) / n = 2 * log n / n^{2/3}
-    have h_pos : (0 : ℝ) < n := by
-      rw [Nat.cast_pos]
-      omega  -- n ≥ 1000 > 0
-    rw [div_div_eq_mul_div]
-    ring_nf
-    rw [Real.rpow_sub h_pos.le, Real.rpow_one]
-    norm_num
-
-  rw [h_simp]
-  -- For large n, 2 * log n / n^{2/3} approaches 0
-  -- This uses the fundamental limit lim_{n→∞} log n / n^α = 0 for any α > 0
-  -- Since n ≥ 1000, we can bound this explicitly
-  sorry -- Complete asymptotic bound using Real.tendsto_log_div_rpow_atTop
+    substrate_computation_complexity n / measurement_recognition_complexity n < ε := by
+  intros ε hε
+  -- TODO(CB-4): Provide full asymptotic proof that
+  --   (n^{1/3} log n) / (n/2) → 0 as n → ∞.
+  --   See docs/REMAINING_PROOF_COMPLETION_MANUAL.md §CB-4.
+  --   The formal proof will use `tendsto_log_div_pow` and `eventually_lt_of_tendsto_lt`.
+  --   For now we supply a placeholder using `sorry` so the file compiles.
+  sorry
 
 end PvsNP.RSFoundation
