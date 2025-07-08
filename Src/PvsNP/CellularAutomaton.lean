@@ -130,7 +130,16 @@ theorem ca_decides_sat (formula : List (List ℤ)) :
   · -- 1 ≤ ceil(n^(1/3) * log(n+1)) for any positive n
     simp [ca_computation_time]
     -- The ceiling of any positive real is at least 1
-    sorry -- ANALYSIS: Ceiling bound for positive expressions
+    -- For n ≥ 1, we have n^(1/3) * log(n+1) ≥ 1^(1/3) * log(2) = log(2) > 0
+    -- Therefore ceil(n^(1/3) * log(n+1)) ≥ 1
+    apply Nat.one_le_ceil_of_pos
+    -- Show that n^(1/3) * log(n+1) > 0
+    apply mul_pos
+    · -- (sat_formula_size formula)^(1/3) > 0
+      exact rpow_pos_of_pos (Nat.cast_add_one_pos _) _
+    · -- log(sat_formula_size formula + 1) > 0
+      exact log_pos (Nat.one_lt_cast.mpr (Nat.succ_lt_succ (Nat.pos_iff_ne_zero.mpr
+        (fun h => by simp [sat_formula_size] at h))))
   · trivial
 
 /-- Main theorem: CA achieves computation-recognition separation -/

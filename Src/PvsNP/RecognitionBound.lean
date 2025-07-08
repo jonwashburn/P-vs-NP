@@ -42,7 +42,7 @@ lemma card_odds (m : ℕ) :
   -- The odd numbers in Fin (4*m) are: 1, 3, 5, ..., 4*m-1
   -- These are exactly 2*m numbers
   cases m with
-  | zero => simp [Finset.filter_eq_empty_iff]
+  | zero => simp only [Nat.mul_zero, Finset.filter_eq_empty_iff, Finset.card_empty]
   | succ m' =>
     -- Use the fact that odd numbers in [0, 4*m) are in bijection with [0, 2*m)
     -- via the map i ↦ 2*i + 1

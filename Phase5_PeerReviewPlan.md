@@ -313,3 +313,4 @@ These helper lemmas **directly plug** into the Section 7.1 proof script.
 
 > This strategy ensures *immediate compilability* while still admitting stronger
 > proofs later.
+ 

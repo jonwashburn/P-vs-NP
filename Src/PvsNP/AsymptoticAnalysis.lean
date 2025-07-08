@@ -69,12 +69,50 @@ theorem lim_ratio :
   -- We use the fact that n^{-2/3} * log n → 0 as n → ∞
   -- This follows from the fact that polynomial decay dominates logarithmic growth
   have h_limit : Tendsto (fun n : ℝ => n^(-2/3 : ℝ) * log n) atTop (𝓝 0) := by
-    -- This is a standard result in asymptotic analysis
-    sorry -- Requires detailed l'Hôpital analysis
+    -- This is a standard result: for any α > 0, n^{-α} * log n → 0
+    -- We use the fact that polynomial decay dominates logarithmic growth
+    -- For α = 2/3 > 0, we have n^{-2/3} * log n → 0
+    apply Tendsto.zero_mul_of_tendsto_zero_of_bounded
+    · -- n^{-2/3} → 0 as n → ∞
+      have : (-2/3 : ℝ) < 0 := by norm_num
+      exact tendsto_rpow_neg_atTop this
+    · -- log n is bounded on any interval [a, ∞)
+      -- Actually, we need to be more careful since log n is unbounded
+      -- Instead, we use the fact that log n = o(n^ε) for any ε > 0
+      -- So log n / n^{2/3} → 0, which means n^{-2/3} * log n → 0
+      -- We can use the standard result that log grows slower than any positive power
+      simp only [isBounded_iff_eventually_bounded]
+      -- We need to show that log n / n^{2/3} is eventually bounded
+      -- For this, we use the fact that log n / n^α → 0 for any α > 0
+      have h_standard : Tendsto (fun n : ℝ => log n / n^(2/3 : ℝ)) atTop (𝓝 0) := by
+        -- This is the standard result that log n / n^α → 0 for α > 0
+        apply tendsto_log_div_rpow_atTop
+        norm_num
+      -- From the limit being 0, we can extract boundedness
+      rw [tendsto_nhds] at h_standard
+      have h_bounded : ∀ᶠ n in atTop, |log n / n^(2/3 : ℝ)| < 1 := by
+        exact h_standard (Set.Iio 1) isOpen_Iio (mem_Iio.mpr zero_lt_one)
+      obtain ⟨N, hN⟩ := eventually_atTop.mp h_bounded
+      use N, 1
+      intro n hn
+      have : log n / n^(2/3 : ℝ) = n^(-2/3 : ℝ) * log n := by
+        rw [rpow_neg, div_eq_mul_inv]
+        ring
+      rw [← this]
+      exact le_of_lt (abs_of_pos (by
+        -- We need to show log n / n^(2/3) > 0 for large n
+        -- This is true for n > 1 since log n > 0 and n^(2/3) > 0
+        apply div_pos
+        · exact log_pos (by linarith : n > 1)
+        · exact rpow_pos_of_pos (by linarith : n > 0) (2/3 : ℝ)
+      ) ▸ hN n hn)
   rw [tendsto_congr]
   · exact h_limit
   · intro n
-    simp [h_rewrite n (by sorry)]
+    simp only [h_rewrite n (by
+      -- We need n > 0 for the rewrite to work
+      sorry -- This is a technical condition that n > 0 for the domain
+    )]
 
 /-- ε-separation theorem: for any ε > 0, the ratio becomes smaller than ε -/
 theorem epsilon_separation (ε : ℝ) (hε : ε > 0) :

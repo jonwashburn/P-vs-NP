@@ -5,6 +5,7 @@
   resolution of P vs NP.
 -/
 
+import PvsNP.RecognitionImports  -- Proven results from ledger-foundation
 import PvsNP.Core
 import PvsNP.RSFoundation
 import PvsNP.TuringMachine

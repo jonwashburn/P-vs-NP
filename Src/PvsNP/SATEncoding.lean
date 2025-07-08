@@ -87,7 +87,7 @@ lemma morton_simple_inverse : ∀ x y z : ℕ,
   x < 1024 → y < 1024 → z < 1024 →
   morton_decode_simple (morton_encode_simple x y z) = (x, y, z) := by
   intro x y z hx hy hz
-  simp [morton_encode_simple, morton_decode_simple]
+  simp only [morton_encode_simple, morton_decode_simple]
   -- Let n = x + 1024*y + 1024²*z
   -- We need to show:
   -- 1. n / (1024²) = z
@@ -103,37 +103,40 @@ lemma morton_simple_inverse : ∀ x y z : ℕ,
     -- So n / 1024² = (x + 1024*y + 1024²*z) / 1024²
     -- = 0 + 0 + z = z
     have h_small : x + 1024 * y < 1024 * 1024 := by
-      calc x + 1024 * y < 1024 + 1024 * y := by linarith
+      calc x + 1024 * y
+        < 1024 + 1024 * y := by linarith
       _ = 1024 * (1 + y) := by ring
       _ < 1024 * 1024 := by
         apply Nat.mul_lt_mul_of_pos_left
         · linarith
         · norm_num
+    -- Use Nat.add_div_of_lt_left to show (a + b*c) / c = b when a < c
+    have h_expanded : n = x + 1024 * y + (1024 * 1024) * z := by
+      simp [n]; ring
+    rw [h_expanded]
     rw [Nat.add_div_of_lt_left h_small]
-    simp [Nat.mul_comm 1024 1024]
+    simp only [Nat.mul_div_cancel_left z (by norm_num : 0 < 1024 * 1024)]
 
   -- Show (n % 1024²) / 1024 = y
   have h2 : (n % (1024 * 1024)) / 1024 = y := by
     -- n % 1024² = x + 1024*y (since this is < 1024²)
     have h_mod : n % (1024 * 1024) = x + 1024 * y := by
-      have : n = (1024 * 1024) * z + (x + 1024 * y) := by
-        simp [n]
-        ring
-      rw [this, Nat.add_mul_mod_self_left]
+      have h_expanded : n = (1024 * 1024) * z + (x + 1024 * y) := by
+        simp [n]; ring
+      rw [h_expanded, Nat.add_mul_mod_self_left]
       exact Nat.mod_eq_of_lt (by linarith : x + 1024 * y < 1024 * 1024)
     rw [h_mod]
     -- (x + 1024*y) / 1024 = y (since x < 1024)
     rw [Nat.add_div_of_lt_left hx]
-    simp
+    simp only [Nat.mul_div_cancel_left y (by norm_num : 0 < 1024)]
 
   -- Show (n % 1024²) % 1024 = x
   have h3 : (n % (1024 * 1024)) % 1024 = x := by
     -- We already know n % 1024² = x + 1024*y
     have h_mod : n % (1024 * 1024) = x + 1024 * y := by
-      have : n = (1024 * 1024) * z + (x + 1024 * y) := by
-        simp [n]
-        ring
-      rw [this, Nat.add_mul_mod_self_left]
+      have h_expanded : n = (1024 * 1024) * z + (x + 1024 * y) := by
+        simp [n]; ring
+      rw [h_expanded, Nat.add_mul_mod_self_left]
       exact Nat.mod_eq_of_lt (by linarith : x + 1024 * y < 1024 * 1024)
     rw [h_mod]
     -- (x + 1024*y) % 1024 = x
@@ -141,7 +144,7 @@ lemma morton_simple_inverse : ∀ x y z : ℕ,
     exact Nat.mod_eq_of_lt hx
 
   -- Combine all three results
-  simp [h1, h2, h3]
+  exact ⟨h1, h2, h3⟩
 
 /-- Helper: Morton decode is left inverse of encode for small values -/
 -- For the P≠NP proof, we use the simple encoding throughout
