@@ -184,7 +184,7 @@ theorem all_foundations_from_meta : MetaPrinciple →
       intro A B h_recognition
       -- Recognition requires energy > 0
       use 1
-    norm_num
+      norm_num
     },
     -- Foundation 4: Unitary Evolution
     by {
@@ -322,25 +322,21 @@ theorem computation_recognition_separation :
 
   -- Use the asymptotic analysis from Asymptotics.lean
   have ⟨N₁, hN₁⟩ := PvsNP.Asymptotics.log_div_pow_twoThirds_eventually_lt ε hε
-  -- Choose N to be the maximum of our lower bound and the asymptotic bound
-  use max N₁ (max 10 (Nat.ceil (Real.exp (2 / ε))))
+  -- Choose N to be a simple bound
+  use max N₁ 10
   intro n h_n_ge_N
   -- Apply the asymptotic bound
-  have h_n_ge_N₁ : n ≥ N₁ := le_trans (le_max_left N₁ _) h_n_ge_N
+  have h_n_ge_N₁ : n ≥ N₁ := by
+    have h_max_le : N₁ ≤ max N₁ 10 := le_max_left N₁ 10
+    exact le_trans h_max_le h_n_ge_N
+  have h_n_ge_10 : n ≥ 10 := by
+    have h_max_le : 10 ≤ max N₁ 10 := le_max_right N₁ 10
+    exact le_trans h_max_le h_n_ge_N
 
   -- Show the expression equivalence: (n^{1/3} * log n) / (n/2) = 2 * log n / n^{2/3}
   have h_equiv : substrate_computation_complexity n / measurement_recognition_complexity n =
                  (2 * Real.log (n : ℝ)) / (n : ℝ)^(2/3 : ℝ) := by
     simp only [substrate_computation_complexity, measurement_recognition_complexity]
-    -- (n^{1/3} * log n) / (n/2) = (n^{1/3} * log n * 2) / n = 2 * log n * n^{1/3} / n
-    -- = 2 * log n * n^{1/3 - 1} = 2 * log n * n^{-2/3} = 2 * log n / n^{2/3}
-    -- This is a standard algebraic manipulation
-    -- We need to show: ((n : ℝ)^(1/3) * Real.log (n : ℝ)) / ((n : ℝ) / 2) = (2 * Real.log (n : ℝ)) / (n : ℝ)^(2/3 : ℝ)
-    have h_n_pos : (0 : ℝ) < n := Nat.cast_pos.mpr (by
-      have : n ≥ max N₁ (max 10 (Nat.ceil (Real.exp (2 / ε)))) := h_n_ge_N
-      have : n ≥ 10 := le_trans (le_max_right (max N₁ 10) _) (le_trans (le_max_left N₁ _) this)
-      linarith : 0 < n)
-    have h_n_ne_zero : (n : ℝ) ≠ 0 := ne_of_gt h_n_pos
     -- This follows from basic algebra: division by (n/2) = multiplication by 2/n
     -- And n^{1/3}/n = n^{1/3 - 1} = n^{-2/3} = 1/n^{2/3}
     -- So: (n^{1/3} * log n) / (n/2) = n^{1/3} * log n * 2/n = 2 * log n / n^{2/3}
