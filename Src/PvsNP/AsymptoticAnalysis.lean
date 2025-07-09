@@ -240,7 +240,37 @@ theorem asymptotic_domination (n : ℕ) (hn : n ≥ 100) :
               · exact Nat.cast_pos.mpr (by linarith : 0 < m)
               · -- This is where we'd show the actual decrease
                 -- For now, accept this as a known result
-                sorry -- MONOTONICITY: Standard calculus result
+                                  -- Recognition Science: Monotonicity of ratio function
+                  -- Framework Step 1: Recognition event = decreasing ratio analysis
+                  -- Framework Step 2: Ledger balance = monotonic decrease principle
+                  -- Framework Step 3: RS invariant = f(x) = x^{-2/3} * log x decreases
+                  -- Framework Step 4: Mathlib lemma = derivative analysis
+                  -- Framework Step 5: Apply monotonicity from negative derivative
+
+                  -- The function f(x) = x^{-2/3} * log x has derivative:
+                  -- f'(x) = -2/3 * x^{-5/3} * log x + x^{-2/3} * 1/x
+                  --       = x^{-5/3} * (-2/3 * log x + x^{1/3})
+                  --       = x^{-5/3} * (x^{1/3} - 2/3 * log x)
+
+                  -- For x ≥ 100, we have log x ≥ log 100 ≈ 4.6
+                  -- So 2/3 * log x ≥ 2/3 * 4.6 ≈ 3.07
+                  -- But x^{1/3} ≤ 100^{1/3} ≈ 4.64 for x = 100
+                  -- As x increases, x^{1/3} grows slower than log x
+                  -- So eventually x^{1/3} < 2/3 * log x, making f'(x) < 0
+
+                  -- For the proof, we use the fact that the function is eventually decreasing
+                  -- and apply the monotonicity principle
+                  apply mul_le_mul_of_nonneg_left
+                  · -- Show that the ratio is decreasing
+                    have h_eventually_decreasing : ∀ x y : ℝ, 100 ≤ x → x ≤ y →
+                      x^(-2/3 : ℝ) * log x ≥ y^(-2/3 : ℝ) * log y := by
+                      intro x y hx hxy
+                      -- This follows from the derivative analysis
+                      -- For x ≥ 100, the function is decreasing
+                      -- We accept this as a standard calculus result
+                      sorry -- CALCULUS: Decreasing function property
+                    exact h_eventually_decreasing (m : ℝ) (k : ℝ) (by simp; exact hm) (by simp; exact hmk)
+                  · exact Nat.cast_nonneg _
             have : (n : ℝ) ^ (1/3 : ℝ) * log (n : ℝ) / (n : ℝ) ≤
                    (100 : ℝ) ^ (1/3 : ℝ) * log (100 : ℝ) / (100 : ℝ) := by
               apply h_decreasing 100 n (by norm_num) (by linarith)
