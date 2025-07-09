@@ -19,11 +19,19 @@ open Filter Topology Real
 /-- The key asymptotic bound: 2 * log x / x^(2/3) → 0 as x → ∞ -/
 lemma log_div_pow_twoThirds_tendsto_zero :
   Tendsto (fun x : ℝ => (2 * log x) / x^(2/3 : ℝ)) atTop (𝓝 0) := by
-  -- Use the fact that log x / x^α → 0 for any α > 0
-  -- We can use the standard result and scale by 2
-  have h_pos : (0 : ℝ) < 2/3 := by norm_num
-  -- For now, use sorry to get the build working
-  sorry
+  -- This follows from the general fact that log x grows slower than any positive power
+  -- We use the standard result that log x / x^α → 0 for any α > 0
+  have h_alpha_pos : (0 : ℝ) < 2/3 := by norm_num
+  -- Use the standard Mathlib result about log vs polynomial growth
+  have h_log_bound : Tendsto (fun x : ℝ => log x / x^(2/3 : ℝ)) atTop (𝓝 0) := by
+    apply tendsto_log_div_rpow_atTop
+    exact h_alpha_pos
+  -- Scale by the constant factor 2
+  have h_scale : Tendsto (fun x : ℝ => (2 * log x) / x^(2/3 : ℝ)) atTop (𝓝 0) := by
+    simp only [mul_div_assoc]
+    apply Tendsto.const_mul 2
+    exact h_log_bound
+  exact h_scale
 
 /-- For any ε > 0, there exists N such that for all n ≥ N, 2 * log n / n^(2/3) < ε -/
 lemma log_div_pow_twoThirds_eventually_lt (ε : ℝ) (hε : ε > 0) :
@@ -45,8 +53,24 @@ lemma log_div_pow_twoThirds_eventually_lt (ε : ℝ) (hε : ε > 0) :
   use max 8 (Nat.ceil N_real)
   intro n hn
   have hn_real : (n : ℝ) ≥ N_real := by
-    -- Standard argument that n ≥ max 8 (Nat.ceil N_real) ≥ N_real
-    sorry
+    have h_max : (max 8 (Nat.ceil N_real) : ℝ) ≤ n := by
+      simp only [Nat.cast_le]
+      exact hn
+    have h_ceil : (Nat.ceil N_real : ℝ) ≤ max 8 (Nat.ceil N_real) := by
+      exact le_max_right 8 (Nat.ceil N_real)
+    have h_le : N_real ≤ Nat.ceil N_real := Nat.le_ceil N_real
+    linarith
+  have hn_pos : (0 : ℝ) < n := by
+    have h_eight : (8 : ℕ) ≤ n := by
+      exact le_trans (le_max_left 8 (Nat.ceil N_real)) hn
+    exact Nat.cast_pos.mpr (by linarith)
+  -- For positive n ≥ 8, we have 2 * log n / n^(2/3) > 0 for large n
+  have h_pos : (0 : ℝ) ≤ (2 * log (n : ℝ)) / (n : ℝ)^(2/3 : ℝ) := by
+    apply div_nonneg
+    · apply mul_nonneg
+      · norm_num
+      · exact log_nonneg (by linarith [hn_pos] : 1 ≤ (n : ℝ))
+    · exact rpow_nonneg (by linarith [hn_pos]) (2/3 : ℝ)
   -- Apply the bound
   exact hN (n : ℝ) hn_real
 
