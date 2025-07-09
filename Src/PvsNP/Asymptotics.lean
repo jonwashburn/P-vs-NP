@@ -22,32 +22,58 @@ lemma log_div_pow_twoThirds_tendsto_zero :
   -- Use the fact that log x / x^α → 0 for any α > 0
   -- We can use the standard result and scale by 2
   have h_pos : (0 : ℝ) < 2/3 := by norm_num
-  -- For now, use sorry to get the build working
-  sorry
+  -- Recognition Science: The substrate-measurement scale separation is fundamental
+  -- log grows slower than any positive power of x
+  have h_base : Tendsto (fun x : ℝ => log x / x^(2/3 : ℝ)) atTop (𝓝 0) := by
+    -- Use Mathlib's tendsto_log_div_rpow_atTop
+    convert tendsto_log_div_rpow_atTop h_pos
+    simp
+  -- Scale by constant 2
+  convert Tendsto.const_mul 2 h_base using 1
+  ext x
+  simp [mul_div_assoc]
 
 /-- For any ε > 0, there exists N such that for all n ≥ N, 2 * log n / n^(2/3) < ε -/
 lemma log_div_pow_twoThirds_eventually_lt (ε : ℝ) (hε : ε > 0) :
-  ∃ N : ℕ, ∀ n : ℕ, n ≥ N → (2 * log (n : ℝ)) / (n : ℝ)^(2/3 : ℝ) < ε := by
-  -- Use the tendsto result to get eventual boundedness
+  ∃ N : ℕ, ∀ n : ℕ, n ≥ N → (2 * Real.log n) / (n : ℝ)^(2/3 : ℝ) < ε := by
+  -- Use the tendsto result
   have h_tendsto := log_div_pow_twoThirds_tendsto_zero
-  -- From the limit being 0, we can extract eventual boundedness
-  have h_bound : ∀ᶠ x in atTop, (2 * log x) / x^(2/3 : ℝ) < ε := by
-    rw [tendsto_nhds] at h_tendsto
-    have h_mem : (0 : ℝ) ∈ Set.Iio ε := by
-      rw [Set.mem_Iio]
-      exact hε
-    have h_open : IsOpen (Set.Iio ε) := isOpen_Iio
-    exact h_tendsto (Set.Iio ε) h_open h_mem
-  -- Convert the filter statement to a natural number bound
-  rw [eventually_atTop] at h_bound
-  obtain ⟨N_real, hN⟩ := h_bound
-  -- Choose N large enough to ensure positivity and the bound
-  use max 8 (Nat.ceil N_real)
+  -- Convert to eventually property
+  rw [tendsto_atTop_nhds] at h_tendsto
+  have h_eventually : ∀ᶠ x : ℝ in atTop, |2 * log x / x^(2/3 : ℝ) - 0| < ε := by
+    apply h_tendsto
+    simp [Metric.ball, dist]
+    exact hε
+  -- Extract concrete N
+  simp at h_eventually
+  rw [Filter.eventually_atTop] at h_eventually
+  obtain ⟨N₀, hN₀⟩ := h_eventually
+  -- Choose N large enough
+  use max (Nat.ceil N₀) 2
   intro n hn
-  have hn_real : (n : ℝ) ≥ N_real := by
-    -- Standard argument that n ≥ max 8 (Nat.ceil N_real) ≥ N_real
-    sorry
+  have hn_pos : 0 < n := by
+    apply Nat.pos_of_ne_zero
+    intro h_zero
+    rw [h_zero] at hn
+    simp at hn
+  have h_n_ge_N₀ : (n : ℝ) ≥ N₀ := by
+    calc (n : ℝ) ≥ max (Nat.ceil N₀) 2 := Nat.cast_le.mpr hn
+    _ ≥ Nat.ceil N₀ := le_max_left _ _
+    _ ≥ N₀ := Nat.le_ceil N₀
   -- Apply the bound
-  exact hN (n : ℝ) hn_real
+  have h_bound := hN₀ n h_n_ge_N₀
+  -- For positive n, 2 * log n / n^(2/3) is positive when n > 1
+  have h_n_gt_one : 1 < n := by
+    calc 1 < 2 := by norm_num
+    _ ≤ max (Nat.ceil N₀) 2 := le_max_right _ _
+    _ ≤ n := hn
+  have h_log_pos : 0 < log n := log_pos (Nat.one_lt_cast.mpr h_n_gt_one)
+  have h_ratio_pos : 0 < 2 * log n / (n : ℝ)^(2/3 : ℝ) := by
+    apply div_pos
+    · exact mul_pos (by norm_num : (0 : ℝ) < 2) h_log_pos
+    · exact rpow_pos_of_pos (Nat.cast_pos.mpr hn_pos) _
+  rw [abs_of_pos h_ratio_pos] at h_bound
+  simp at h_bound
+  exact h_bound
 
 end PvsNP.Asymptotics
